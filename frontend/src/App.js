@@ -1,7 +1,15 @@
+import {
+Route,
+RouterProvider,
+createBrowserRouter,
+createRoutesFromElements
+} from "react-router-dom"
+
 import { Container } from 'react-bootstrap'
 import Footer from './components/Footer'
 import Header from './components/Header'
-import HomeScreen from './screen/HomeScreen'
+//import HomeScreen from './screen/HomeScreen'
+import { Outlet } from "react-router-dom"
 import React from 'react'
 
 const App = () => {
@@ -10,7 +18,7 @@ const App = () => {
       <Header/>
       <main className='py-3'>
     <Container>
-<HomeScreen/>
+<Outlet/>
     </Container>
     </main>
     <Footer/>

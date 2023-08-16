@@ -1,60 +1,74 @@
+/* Set the minimum height of the main element to 80% of the viewport height */
 main {
   min-height: 80vh;
 }
 
+/* Apply margin to spans within the "rating" class */
 .rating span {
   margin: 0.1rem;
 }
 
+/* Set the color for SVG elements within the "rating" class */
 .rating svg {
-  color: #f8e825;
+  color: #C23373; /* This color is a shade of pink */
 }
 
+/* Styling for the text associated with a rating */
 .rating-text {
   font-size: 0.8rem;
   font-weight: 600;
   padding-left: 0.5rem;
 }
-.stenoLogo{
-height: 50px;
-border-radius: 70%;
-}
-.icon{
-  background-color: white;
+
+/* Styling for the "stenoLogo" class */
+.stenoLogo {
+  height: 50px; /* Set the height of the logo */
+  border-radius: 70%; /* Apply rounded corners to the logo */
 }
 
+/* Styling for elements with the "icon" class */
+.icon {
+  background-color: white; /* Set the background color to white */
+}
+
+/* Styling for the product title */
 .product-title {
-  height: 2.5em; /* Set a fixed height */
-  overflow: hidden; /* Hide overflow content */
-  text-overflow: ellipsis; /* Add ellipsis for long text */
-  white-space: nowrap; /* Prevent wrapping */
+  height: 2.5em; /* Set a fixed height for the title */
+  overflow: hidden; /* Hide content that exceeds the height */
+  text-overflow: ellipsis; /* Add an ellipsis (...) for long text */
+  white-space: nowrap; /* Prevent text from wrapping to the next line */
 }
 
+/* Center-align text in table cells */
 table td,
 table th {
   text-align: center;
 }
 
+/* Styling for reviews section */
 .review {
   margin-top: 30px;
 }
 
+/* Styling for review section headings */
 .review h2 {
   font-size: 24px;
-  background: #f4f4f4;
+  background: #f4f4f4; /* Light gray background color */
   padding: 10px;
-  border: 1px solid #ddd;
+  border: 1px solid #ddd; /* Light gray border */
 }
 
+/* Styling for review section buttons */
 .review button {
   margin-top: 10px;
 }
 
+/* Styling for carousel captions */
 .carousel-caption {
   position: absolute;
   width: 100%;
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
 }
