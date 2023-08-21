@@ -1,18 +1,11 @@
 // Import the 'connectDB' function from the 'db.js' file
 
+import { errorHandler, notFound } from "./middleWare/errorMiddleWare.js";
+
 import connectDB from "./config/db.js";
 import dotenv from "dotenv";
 import express from "express";
-import products from "./data/products.js";
-
-// Import the 'dotenv' library to load environment variables from '.env' file
-
-
-// Import the 'express' library to create the server
-
-
-// Import the 'products' data array
-
+import productRoutes from "./Routes/ProductsRoutes.js";
 
 // Load environment variables from the '.env' file
 dotenv.config();
@@ -31,20 +24,9 @@ app.get("/", (req, res) => {
     res.send("Server is running");
 });
 
-// Set up a route to handle requests for retrieving all products
-app.get("/api/products", (req, res) => {
-    // Respond with the 'products' data array in JSON format
-    res.json(products);
-});
-
-// Set up a route to handle requests for retrieving a specific product by its ID
-app.get("/api/products/:id", (req, res) => {
-    // Find a product in the 'products' array that matches the provided ID
-    const product = products.find((p) => p._id === req.params.id);
-
-    // Respond with the found product in JSON format
-    res.json(product);
-});
+app.use(`/api/products`, productRoutes)
+app.use(notFound);
+app.use(errorHandler)
 
 // Start the Express server, listening on the defined port
 app.listen(port, () => {

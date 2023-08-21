@@ -2,8 +2,7 @@
 
 import bcrypt from "bcryptjs";
 
-const { hashSync } = bcrypt;
-
+//const { hashSync } = bcrypt;
 
 // Define an array of user objects, including name, email, hashed password, and isAdmin status
 const users = [
