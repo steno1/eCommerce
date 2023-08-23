@@ -1,31 +1,21 @@
-import Product from "../models/productModel.js";
-import asyncHandler from "../middleWare/asyncHandler.js";
-import express  from "express";
+// Import the controller functions for handling requests
 
-//import products from "../data/products.js";
+import { getProductById, getProducts } from "../controller/productController.js";
+
+import express from "express";
+
+// Import the express module
 
 
-const router=express.Router();
+// Create an instance of the Express router
+const router = express.Router();
 
-// Set up a route to handle requests for retrieving all products
-router.get("/", asyncHandler(async (req, res) => {
-    const products=await Product.find({})
-    res.json(products);
-}));
+// Define routes and their corresponding controller functions
+// When a GET request is made to '/', the getProducts function will be called
+router.route('/').get(getProducts);
 
-// Set up a route to handle requests for retrieving a specific product by its ID
-router.get("/:id", asyncHandler(async (req, res) => {
-    // Find a product in the 'products' array that matches the provided ID
-    const product = await Product.findById(req.params.id)
-    if(product){
+// When a GET request with an ID parameter is made to '/:id', the getProductById function will be called
+router.route("/:id").get(getProductById);
 
-    // Respond with the found product in JSON format
-    res.json(product);
-    }else{
-        res.status(404)
-        throw new Error(`Resource not found`)
-    }
-    
-
-}));
- export default router;
+// Export the router to be used in other parts of the application
+export default router;

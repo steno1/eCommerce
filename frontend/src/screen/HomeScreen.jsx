@@ -1,32 +1,43 @@
-import { Col, Row } from "react-bootstrap";
-import { useEffect, useState } from "react";
+// Import necessary components and functions from external libraries and files
 
-import Product from "../components/Product";
-import React from 'react';
-import axios from "axios";
+import { Col, Row } from "react-bootstrap"; // Importing layout components from react-bootstrap for grid structure
 
+import Product from "../components/Product"; // Importing the Product component
+import React from 'react'; // Importing the React library for building UI components
+import { useGetProductsQuery } from "../slices/productApiSlice"; // Importing a custom query hook for fetching product data
+
+// Define the HomeScreen component
 const HomeScreen = () => {
-  const [products, setProducts]=useState([])
-  useEffect(()=>{
-const fetchProducts=async ()=>{
-  const {data}=await axios.get(`/api/products`);
-  setProducts(data)
-}
-fetchProducts();
+  // Use the custom query hook to fetch product data from the API
+  const { data: products, isLoading, error } = useGetProductsQuery();
 
-  },[])
+  // Render the component's UI
   return (
     <>
-      <h1> Latest Products</h1> 
-      <Row>
-        {products.map((product) => (
-          <Col key={product._id} sm={12} md={6} lg={4} xl={3}>
-            <Product product={product}/>
-          </Col>
-        ))}
-      </Row>
+      {/* Check if the data is still loading */}
+      {isLoading ? (
+        <h2>Loading...</h2>
+      ) : error ? (
+        // Check if an error occurred while fetching data
+        <div>{error.data.message || error.error}</div>
+      ) : (
+        <>
+          {/* If data is loaded and no error, display the list of products */}
+          <h1>Latest Products</h1>
+          <Row>
+            {/* Map through the products array and render each product */}
+            {products.map((product) => (
+              <Col key={product._id} sm={12} md={6} lg={4} xl={3}>
+                {/* Render the Product component with the current product */}
+                <Product product={product} />
+              </Col>
+            ))}
+          </Row>
+        </>
+      )}
     </>
   );
 }
 
+// Export the HomeScreen component to be used in other parts of the application
 export default HomeScreen;
