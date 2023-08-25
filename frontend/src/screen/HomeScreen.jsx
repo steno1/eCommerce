@@ -2,6 +2,8 @@
 
 import { Col, Row } from "react-bootstrap"; // Importing layout components from react-bootstrap for grid structure
 
+import Loader from "../components/Loader";
+import Message from "../components/Message";
 import Product from "../components/Product"; // Importing the Product component
 import React from 'react'; // Importing the React library for building UI components
 import { useGetProductsQuery } from "../slices/productApiSlice"; // Importing a custom query hook for fetching product data
@@ -16,10 +18,13 @@ const HomeScreen = () => {
     <>
       {/* Check if the data is still loading */}
       {isLoading ? (
-        <h2>Loading...</h2>
+        <Loader/>
       ) : error ? (
         // Check if an error occurred while fetching data
-        <div>{error.data.message || error.error}</div>
+        <Message variant="danger">
+{error.data.message || error.error}
+        </Message>
+       
       ) : (
         <>
           {/* If data is loaded and no error, display the list of products */}
