@@ -2,6 +2,7 @@
  from respective modules.*/
 
 import { apiSlice } from "./slices/apiSlice";
+import cardSliceReducer from "./slices/cardSlice";
 import { configureStore } from "@reduxjs/toolkit";
 
 // Configure the Redux store using 'configureStore' function.
@@ -10,6 +11,7 @@ const store = configureStore({
     reducer: {
 [apiSlice.reducerPath]: apiSlice.reducer,
  /* Use the reducer from 'apiSlice' under a specific path.*/
+ cart:cardSliceReducer
     },
     // Configure middleware for the store.
     middleware: (getDefaultMiddleware) =>
