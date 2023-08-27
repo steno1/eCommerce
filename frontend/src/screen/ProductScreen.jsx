@@ -1,19 +1,30 @@
-// Importing necessary components and modules from external libraries
+// Import necessary components and modules from external libraries
 
-import { Button, Card, Col, Image, ListGroup, Row } from 'react-bootstrap';
+import { Button, Card, Col, Form, Image, ListGroup, Row } from 'react-bootstrap';
+import React, { useState } from 'react'; // Import useState hook
+import { useNavigate, useParams } from 'react-router-dom'; // Import necessary hooks
 
 import { Link } from 'react-router-dom';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
 import Rating from '../components/Rating';
-import React from 'react';
+import { addToCart } from '../slices/cardSlice'; // Import the addToCart action from Redux slice
+import { useDispatch } from 'react-redux'; // Import useDispatch hook
 import { useGetProductDetailsQuery } from '../slices/productApiSlice';
-import { useParams } from 'react-router-dom';
 
 // Functional component representing the product details screen
 const ProductScreen = () => {
   // Extracting the 'productId' parameter from the URL using React Router's 'useParams' hook
   const { id: productId } = useParams();
+
+  // Initializing Redux's dispatch function to dispatch actions
+  const dispatch = useDispatch();
+
+  // Initializing the navigate function to handle navigation
+  const navigate = useNavigate();
+
+  // Using useState to manage the quantity selected by the user
+  const [qty, setQty] = useState(1);
 
   // Fetching product details using a Redux Toolkit query
   const { data: product, isLoading, error } = useGetProductDetailsQuery(productId);
@@ -24,6 +35,15 @@ const ProductScreen = () => {
     padding: '20px',
     borderRadius: '10px',
     border: '0.1px solid #1A5D1A',
+  };
+
+  // Function to handle adding a product to the cart
+  const addToCartHandler = () => {
+    // Dispatching the addToCart action with product details and selected quantity
+    dispatch(addToCart({ ...product, qty }));
+
+    // Navigating to the cart page
+    navigate('/cart');
   };
 
   return (
@@ -41,9 +61,9 @@ const ProductScreen = () => {
         // Display an error message if there's an error during data fetching
         <Message variant="danger">
           {/* Displaying the error message from the API response or network error */}
-          {error.data.message || error.error}
+          {error.data?.message || error.error}
         </Message>
-      ) : (
+      ) : product ? ( // Check if 'product' is defined
         // Display product details once data is loaded
         <Row>
           <Col md={5}>
@@ -89,9 +109,39 @@ const ProductScreen = () => {
                     </Col>
                   </Row>
                 </ListGroup.Item>
+                {/* Display product quantity selection */}
+                {product.countInStock > 0 && (
+                  <ListGroup.Item>
+                    <Row>
+                      <Col>Qty</Col>
+                      <Col>
+                        <Form.Control
+                          as="select" // Render as a select dropdown
+                          value={qty} // Set the selected value to the current state value 'qty'
+                          onChange={(e) => setQty(Number(e.target.value))} // Update 'qty' state when value changes
+                        >
+                          {/* Generate options for available quantity based on 'countInStock' */}
+                          {/* Loop through each number up to 'countInStock' and create an option */}
+                          {([...Array(product.countInStock).keys()]).map((x) => (
+                            // Set a unique 'key' attribute for React's tracking
+                            // Set the 'value' attribute to the number (starting from 1)
+                            <option key={x + 1} value={x + 1}>
+                              {x + 1} {/* Display the quantity number */}
+                            </option>
+                          ))}
+                        </Form.Control>
+                      </Col>
+                    </Row>
+                  </ListGroup.Item>
+                )}
                 {/* Button to add the product to the cart */}
                 <ListGroup.Item>
-                  <Button className='btn-block' type='button' disabled={product.countInStock === 0}>
+                  <Button
+                    className='btn-block'
+                    type='button'
+                    disabled={product.countInStock === 0}
+                    onClick={addToCartHandler} // Call the addToCartHandler function on button click
+                  >
                     Add to Cart
                   </Button>
                 </ListGroup.Item>
@@ -99,7 +149,7 @@ const ProductScreen = () => {
             </Card>
           </Col>
         </Row>
-      )}
+      ) : null}
     </>
   );
 };
