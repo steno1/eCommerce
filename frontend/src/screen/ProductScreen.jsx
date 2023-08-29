@@ -39,8 +39,11 @@ const ProductScreen = () => {
 
   // Function to handle adding a product to the cart
   const addToCartHandler = () => {
-    // Dispatching the addToCart action with product details and selected quantity
-    dispatch(addToCart({ ...product, qty }));
+    /* Dispatching the addToCart action with product
+     details and selected quantity*/
+    dispatch(addToCart({
+       ...product,
+       qty }));
 
     // Navigating to the cart page
     navigate('/cart');
@@ -113,22 +116,22 @@ const ProductScreen = () => {
                 {product.countInStock > 0 && (
                   <ListGroup.Item>
                     <Row>
-                      <Col>Qty</Col>
+                      <Col>Quantity</Col>
                       <Col>
-                        <Form.Control
-                          as="select" // Render as a select dropdown
-                          value={qty} // Set the selected value to the current state value 'qty'
-                          onChange={(e) => setQty(Number(e.target.value))} // Update 'qty' state when value changes
-                        >
-                          {/* Generate options for available quantity based on 'countInStock' */}
-                          {/* Loop through each number up to 'countInStock' and create an option */}
-                          {([...Array(product.countInStock).keys()]).map((x) => (
-                            // Set a unique 'key' attribute for React's tracking
-                            // Set the 'value' attribute to the number (starting from 1)
-                            <option key={x + 1} value={x + 1}>
-                              {x + 1} {/* Display the quantity number */}
-                            </option>
-                          ))}
+  <Form.Control
+      as="select" // Render as a select dropdown
+ value={qty} // Set the selected value to the current state value 'qty'
+  onChange={(e) => setQty(Number(e.target.value))} // Update 'qty' state when value changes
+         >
+{/* Generate options for available quantity based on 'countInStock' */}
+{/* Loop through each number up to 'countInStock' and create an option */}
+     {([...Array(product.countInStock).keys()]).map((x) => (
+// Set a unique 'key' attribute for React's tracking
+ // Set the 'value' attribute to the number (starting from 1)
+      <option key={x + 1} value={x + 1}>
+        {x + 1} {/* Display the quantity number */}
+        </option>
+        ))}
                         </Form.Control>
                       </Col>
                     </Row>
