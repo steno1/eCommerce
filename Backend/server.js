@@ -6,6 +6,7 @@ import connectDB from "./config/db.js";
 import dotenv from "dotenv";
 import express from "express";
 import productRoutes from "./Routes/ProductsRoutes.js";
+import userRoutes from "./Routes/userRoute.js";
 
 // Load environment variables from the '.env' file
 dotenv.config();
@@ -19,12 +20,16 @@ connectDB();
 // Create an instance of the Express application
 const app = express();
 
+//Body Parser Middleware
+app.use(express.json())
+app.use(express.urlencoded({extended:true}));
 // Set up a route that responds with a simple message when the root URL is accessed
 app.get("/", (req, res) => {
     res.send("Server is running");
 });
 
 app.use(`/api/products`, productRoutes)
+app.use(`/api/users`, userRoutes)
 app.use(notFound);
 app.use(errorHandler)
 

@@ -2,7 +2,19 @@
 main {
   min-height: 80vh;
 }
-
+.trashSpan{
+  
+  display: flex; /* Use flexbox for layout */
+  justify-content: center; /* Center content horizontally */
+  align-items: center; /* Center content vertically */
+  height: 40px;
+  width: 40px;
+}
+.trashSpan:hover{
+  background-color:#9A3B3B;
+  border-radius: 30%;
+  margin: 4px;
+}
 /* Apply margin to spans within the "rating" class */
 .rating span {
   margin: 0.1rem;

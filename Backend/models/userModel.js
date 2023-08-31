@@ -1,5 +1,6 @@
 // Import the Mongoose library for MongoDB interaction
 
+import bcrypt from "bcryptjs";
 import mongoose from "mongoose";
 
 // Define a Mongoose schema for users
@@ -26,6 +27,9 @@ const userSchema = new mongoose.Schema({
     timestamps: true  // Enable automatic timestamp generation
 });
 
+userSchema.methods.matchPassword=async function(enteredPassword){
+    return await bcrypt.compare(enteredPassword, this.password)
+}
 // Create a Mongoose model named 'User' using the 'userSchema' schema
 const User = mongoose.model("User", userSchema);
 
