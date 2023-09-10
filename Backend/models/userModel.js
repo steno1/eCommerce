@@ -3,6 +3,9 @@
 import bcrypt from "bcryptjs";
 import mongoose from "mongoose";
 
+// Import the bcrypt library for password hashing
+   // Import the mongoose library for defining and working with MongoDB schemas and models
+
 // Define a Mongoose schema for users
 const userSchema = new mongoose.Schema({
     name: {
@@ -27,17 +30,27 @@ const userSchema = new mongoose.Schema({
     timestamps: true  // Enable automatic timestamp generation
 });
 
-userSchema.methods.matchPassword=async function(enteredPassword){
-    return await bcrypt.compare(enteredPassword, this.password)
+// Define a custom method for the userSchema to compare an entered password with the user's stored hashed password.
+userSchema.methods.matchPassword = async function (enteredPassword) {
+    // Use bcrypt's compare function to compare the enteredPassword with the user's stored hashed password.
+    // This function returns a promise, so we use 'await' to wait for the result.
+    return await bcrypt.compare(enteredPassword, this.password);
 }
 
-userSchema.pre("save", async function(next){
-    if(!this.isModified("password")){
-next();
+// Define a pre-save middleware for the userSchema to hash the user's password before saving it.
+userSchema.pre("save", async function (next) {
+    // Check if the password field has not been modified (e.g., during an update).
+    if (!this.isModified("password")) {
+        next(); // If not modified, proceed to the next middleware or save operation.
     }
-const salt=await bcrypt.genSalt(10);
-this.password=await bcrypt.hash(this.password, salt)
-})
+
+    // Generate a salt using bcrypt with a cost factor of 10 (controls the computation time).
+    const salt = await bcrypt.genSalt(10);
+
+    // Hash the user's password using the generated salt.
+    this.password = await bcrypt.hash(this.password, salt);
+});
+
 // Create a Mongoose model named 'User' using the 'userSchema' schema
 const User = mongoose.model("User", userSchema);
 
