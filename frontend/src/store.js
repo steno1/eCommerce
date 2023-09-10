@@ -1,7 +1,7 @@
-/* Import the 'apiSlice' and 'configureStore'
- from respective modules.*/
+// Import necessary modules and slices
 
 import { apiSlice } from "./slices/apiSlice";
+import authSlice from "./slices/authSlice";
 import cartSlice from "./slices/cardSlice";
 import { configureStore } from "@reduxjs/toolkit";
 
@@ -9,14 +9,16 @@ import { configureStore } from "@reduxjs/toolkit";
 const store = configureStore({
     // Define the reducers for the store.
     reducer: {
-[apiSlice.reducerPath]: apiSlice.reducer,
- /* Use the reducer from 'apiSlice' under a specific path.*/
- cart:cartSlice
+        // Associate the reducer from 'apiSlice' with a specific path in the store.
+        [apiSlice.reducerPath]: apiSlice.reducer,
+        // Include the 'cartSlice' and 'authSlice' reducers in the store.
+        cart: cartSlice,
+        auth: authSlice
     },
     // Configure middleware for the store.
     middleware: (getDefaultMiddleware) =>
-        getDefaultMiddleware().concat(apiSlice.middleware), 
-        /* Include the middleware from 'apiSlice'.*/
+        // Include the middleware from 'apiSlice' in the middleware stack.
+        getDefaultMiddleware().concat(apiSlice.middleware),
     // Enable Redux DevTools for debugging.
     devTools: true
 });
