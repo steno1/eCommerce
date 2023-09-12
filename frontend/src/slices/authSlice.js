@@ -28,13 +28,17 @@ const authSlice = createSlice({
 
 // Store the updated 'userInfo' in the browser's local storage as a JSON string
     localStorage.setItem("userInfo", JSON.stringify(action.payload));
+        },
+    logout:(state, action)=>{
+            state.userInfo = null;
+            localStorage.removeItem("userInfo")
         }
     }
 });
 
 
 // Exporting the setCredentials action for Redux actions
-export const { setCredentials } = authSlice.actions;
+export const { setCredentials, logout } = authSlice.actions;
 
 // Exporting the reducer function for use in a Redux store
 export default authSlice.reducer;

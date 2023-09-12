@@ -5,7 +5,12 @@ import { FaShoppingCart, FaUser } from "react-icons/fa"; // Corrected import for
 
 import { LinkContainer } from "react-router-bootstrap"; // Import LinkContainer for routing
 import React from 'react';
+import { UseSelector } from "react-redux/es/hooks/useSelector";
 import logo from "../assets/steno_logo.jpg"; // Import logo image.
+import { logout } from "../slices/authSlice";
+import { useDispatch } from "react-redux";
+import { useLogoutMutation } from "../slices/usersApi";
+import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux/es/hooks/useSelector";
 
 /* Import useSelector to access Redux state*/
@@ -15,8 +20,19 @@ const Header = () => {
   const { cartItems } = useSelector((state) => state.cart);
   const { userInfo } = useSelector((state) => state.auth);
 
-  const logoutHandler = () => {
-    console.log("logout")
+  const dispatch = useDispatch(); // For dispatching Redux actions.
+  const navigate = useNavigate(); // For client-side navigation.
+  const [logoutApiCall] = useLogoutMutation(); // For handling a logout API call.
+
+  // This asynchronous function, 'logoutHandler', handles user logout.
+  const logoutHandler = async () => {
+    try {
+      await logoutApiCall().unwrap(); // Performs the logout API call and unwraps the result.
+      dispatch(logout()); // Dispatches a 'logout' action to update authentication state.
+      navigate("/login"); // Navigates the user to the "/login" route.
+    } catch (err) {
+      console.log(err); // Logs any errors that occur during the logout process.
+    }
   }
 
   return (
