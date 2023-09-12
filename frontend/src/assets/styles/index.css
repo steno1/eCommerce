@@ -84,3 +84,8 @@ table th {
   bottom: 0;
   background: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
 }
+
+.red-email-input {
+  color: black; 
+  font-weight: 500;
+}

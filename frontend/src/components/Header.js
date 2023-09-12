@@ -1,6 +1,6 @@
 // Import necessary components and icons from React and react-bootstrap
 
-import { Badge, Container, Nav, Navbar } from "react-bootstrap";
+import { Badge, Container, Nav, NavDropdown, Navbar } from "react-bootstrap";
 import { FaShoppingCart, FaUser } from "react-icons/fa"; // Corrected import for FaShoppingCart
 
 import { LinkContainer } from "react-router-bootstrap"; // Import LinkContainer for routing
@@ -13,7 +13,11 @@ import { useSelector } from "react-redux/es/hooks/useSelector";
 const Header = () => {
   // Use useSelector to get cartItems from the Redux store's cart state
   const { cartItems } = useSelector((state) => state.cart);
-  console.log(cartItems); // Log the cart items to the console
+  const { userInfo } = useSelector((state) => state.auth);
+
+  const logoutHandler = () => {
+    console.log("logout")
+  }
 
   return (
     <header>
@@ -35,23 +39,45 @@ const Header = () => {
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="ms-auto"> {/* Use the Nav component for navigation */}
               {/* Cart link */}
-              <Nav.Link href="/cart">
-                {/* Cart icon */}
-                <FaShoppingCart style={{ color: 'white' }}/> Cart
-                {/* Display cart badge only if there are items in the cart */}
-                {cartItems.length > 0 && (
-             <Badge pill bg="success" style={{ marginLeft: "5px" }}>
-              {/* Calculate the total quantity of items in the cart */}
-                {cartItems.reduce((acc, curr) => acc + curr.qty, 0)}
-                  </Badge>
-                )}
-              </Nav.Link>
+              <LinkContainer to='/cart'>
+                <Nav.Link href="/cart">
+                  {/* Cart icon */}
+                  <FaShoppingCart style={{ color: 'white' }}/> Cart
+                  {/* Display cart badge only if there are items in the cart */}
+                  {cartItems.length > 0 && (
+                    <Badge pill bg="success" style={{ marginLeft: "5px" }}>
+                      {/* Calculate the total quantity of items in the cart */}
+                      {cartItems.reduce((acc, curr) => acc + curr.qty, 0)}
+                    </Badge>
+                  )}
+                </Nav.Link>
+              </LinkContainer>
               
-              {/* Sign In link */}
-              <Nav.Link href="/signin">
-                {/* User icon */}
-                <FaUser style={{ color: 'white' }}/> Sign In
-              </Nav.Link>
+     {userInfo ? ( // Check if userInfo is truthy (i.e., user is logged in)
+  <NavDropdown title={userInfo.name} id="username">
+    {/* Display a dropdown menu with the user's name as the title */}
+    <LinkContainer to='/profile'>
+      {/* Create a LinkContainer that wraps the 'Profile' navigation item */}
+      <NavDropdown.Item>Profile</NavDropdown.Item>
+      {/* Display 'Profile' as a clickable dropdown item */}
+    </LinkContainer> 
+    <NavDropdown.Item onClick={logoutHandler}>
+      {/* Display 'Logout' as a clickable dropdown item */}
+      Logout    
+    </NavDropdown.Item>
+  </NavDropdown>
+) : ( // If userInfo is falsy (i.e., user is not logged in)
+  <LinkContainer to='/login'>
+    {/* Create a LinkContainer that wraps the 'Sign In' navigation item */}
+    {/* Sign In link */}
+    <Nav.Link href="/login">
+      {/* Create a clickable navigation link */}
+      {/* User icon */}
+      <FaUser style={{ color: 'white' }}/> Sign In
+      {/* Display a user icon followed by 'Sign In' text */}
+    </Nav.Link>
+  </LinkContainer>
+)}
             </Nav>
           </Navbar.Collapse>
         </Container>
