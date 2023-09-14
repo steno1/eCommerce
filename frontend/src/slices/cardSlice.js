@@ -7,7 +7,9 @@ import { updateCart } from "../utils/cardUtils.js"; // Importing a utility funct
 // or set an empty cart as the initial state
 const initialState = localStorage.getItem("cart")
   ? JSON.parse(localStorage.getItem("cart"))
-  : { cartItems: [] };
+  : { cartItems: [],
+     shippingAddress:{},
+    paymentMethod:"paypal" };
   
 /* 
    This block checks if there is any cart data stored in the local storage.
@@ -48,6 +50,10 @@ const cartSlice = createSlice({
       // Call a utility function to update the cart
       return updateCart(state);
     },
+    saveShippingAddress:(state, action)=>{
+state.shippingAddress=action.payload
+return updateCart(state);
+    }
   },
 });
 
@@ -58,7 +64,8 @@ const cartSlice = createSlice({
 */
 
 // Extract the 'addToCart' and 'removeFromCart' actions from the cartSlice
-export const { addToCart, removeFromCart } = cartSlice.actions;
+export const { addToCart, removeFromCart,
+   saveShippingAddress } = cartSlice.actions;
 
 /* 
    This line extracts the 'addToCart' and 'removeFromCart' actions from the 'cartSlice' slice.

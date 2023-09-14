@@ -2,7 +2,6 @@
 
 import { Button, Col, Form, Row } from 'react-bootstrap'; // Importing Bootstrap components for styling the form.
 import { Link, useLocation, useNavigate } from 'react-router-dom'; // Importing React Router components for navigation.
-import { Toast, toast } from 'react-toastify'; // Importing Toast components from react-toastify for displaying notifications.
 import { useDispatch, useSelector } from 'react-redux'; // Importing Redux hooks for state management.
 import { useEffect, useState } from 'react'; // Importing the useState hook from React for managing component state.
 
@@ -10,6 +9,7 @@ import FormContainer from '../components/formContainer'; // Importing a custom c
 import Loader from '../components/Loader'; // Importing a custom Loader component for displaying loading indicators.
 import React from 'react'; // Importing the React library for creating functional components.
 import { setCredentials } from '../slices/authSlice'; // Importing an action creator from the Redux authSlice.
+import { toast } from 'react-toastify'; // Importing Toast components from react-toastify for displaying notifications.
 import { useRegisterMutation } from '../slices/usersApi'; // Importing a mutation function from Redux Toolkit API for user registration.
 
 // Defining a functional component called "RegisterScreen."

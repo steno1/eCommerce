@@ -25,11 +25,9 @@ const CartScreen = () => {
         dispatch(addToCart({ ...product, qty })); 
 /* Dispatch the addToCart action with the selected product and quantity*/
     };
-
-      
+ 
       const removeFromCartHandler = async (id) => {
         dispatch(removeFromCart(id)); 
-
     };
 
     const checkOutHandler=()=>{
