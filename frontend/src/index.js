@@ -1,6 +1,3 @@
-// Import Bootstrap CSS
-// import 'bootstrap/dist/css/bootstrap.min.css';
-
 // Import custom Bootstrap styles
 import "./assets/styles/bootstrap.custom.css";
 // Import global styles
@@ -19,6 +16,7 @@ import App from './App';
 import CartScreen from "./screen/cartScreen";
 import HomeScreen from "./screen/HomeScreen";
 import LoginScreen from "./screen/loginScreen";
+import PrivateRoute from "./components/privateRoute";
 import ProductScreen from "./screen/ProductScreen";
 import { Provider } from "react-redux";
 import React from 'react';
@@ -40,7 +38,12 @@ const router = createBrowserRouter(createRoutesFromElements(
       <Route path="/cart" element={<CartScreen/>}/>
       <Route path="/login" element={<LoginScreen/>}/>
       <Route path="/register" element={<RegisterScreen/>}/>
-      <Route path="/shipping" element={<ShippingScreen/>}/>
+      
+      {/* Make ShippingScreen a private route */}
+      <Route path='/' element={<PrivateRoute />}>
+        <Route index={true} path="/" element={<PrivateRoute />}/>
+        <Route path="/shipping" element={<ShippingScreen/>}/>
+      </Route>
     </Route>
   </>
 ));
@@ -56,4 +59,3 @@ root.render(
     </Provider>
   </React.StrictMode>
 );
-
