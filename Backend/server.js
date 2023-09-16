@@ -6,6 +6,7 @@ import connectDB from "./config/db.js";
 import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 import express from "express";
+import orderRoutes from "./Routes/orderRoutes.js";
 import productRoutes from "./Routes/ProductsRoutes.js";
 import userRoutes from "./Routes/userRoute.js";
 
@@ -35,6 +36,7 @@ app.get("/", (req, res) => {
 
 app.use(`/api/products`, productRoutes)
 app.use(`/api/users`, userRoutes)
+app.use(`/api/orders`, orderRoutes)
 app.use(notFound);
 app.use(errorHandler)
 

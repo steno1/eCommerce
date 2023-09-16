@@ -53,6 +53,10 @@ const cartSlice = createSlice({
     saveShippingAddress:(state, action)=>{
 state.shippingAddress=action.payload
 return updateCart(state);
+    },
+    savePaymentMethod:(state, action)=>{
+state.paymentMethod=action.payload
+return updateCart(state);
     }
   },
 });
@@ -65,7 +69,7 @@ return updateCart(state);
 
 // Extract the 'addToCart' and 'removeFromCart' actions from the cartSlice
 export const { addToCart, removeFromCart,
-   saveShippingAddress } = cartSlice.actions;
+   saveShippingAddress, savePaymentMethod} = cartSlice.actions;
 
 /* 
    This line extracts the 'addToCart' and 'removeFromCart' actions from the 'cartSlice' slice.

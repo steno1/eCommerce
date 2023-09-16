@@ -3,6 +3,7 @@
 import { Button, Form, FormControl, FormGroup, FormLabel } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 
+import CheckOutStep from '../components/checkOutStep'
 import FormContainer from '../components/formContainer'
 import React from 'react'
 import { saveShippingAddress } from '../slices/cardSlice.js'
@@ -11,6 +12,7 @@ import { useState } from 'react'
 
 // Define a functional component named ShippingScreen
 const ShippingScreen = () => {
+
     // Using the useSelector hook to get data from Redux store
     const cart = useSelector((state) => state.cart) 
 
@@ -49,6 +51,7 @@ const ShippingScreen = () => {
     // Return the JSX for rendering the component
     return (
         <FormContainer>
+            <CheckOutStep step1 step2/>
             <h1>Shipping</h1>
             <Form onSubmit={submitHandler}>
                 {/* Form controls for Address */}
@@ -104,7 +107,7 @@ const ShippingScreen = () => {
                 </FormGroup>
 
                 {/* Button to submit the form */}
-                <Button type='submit' variant='primary' className='my-2'>
+         <Button type='submit' variant='primary' className='my-2'>
                     Continue
                 </Button>
             </Form>
