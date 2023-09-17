@@ -57,6 +57,10 @@ return updateCart(state);
     savePaymentMethod:(state, action)=>{
 state.paymentMethod=action.payload
 return updateCart(state);
+    },
+    clearCartItem:(state, action)=>{
+state.cartItems=[];
+return updateCart(state)
     }
   },
 });
@@ -68,7 +72,7 @@ return updateCart(state);
 */
 
 // Extract the 'addToCart' and 'removeFromCart' actions from the cartSlice
-export const { addToCart, removeFromCart,
+export const { addToCart, removeFromCart,clearCartItem,
    saveShippingAddress, savePaymentMethod} = cartSlice.actions;
 
 /* 
