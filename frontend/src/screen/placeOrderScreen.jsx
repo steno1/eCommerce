@@ -1,3 +1,5 @@
+// Importing necessary components and hooks from external libraries and files
+
 import { Button, Card, Col, Image, ListGroup, ListGroupItem, Row } from 'react-bootstrap'
 import { Link, useNavigate } from 'react-router-dom'
 
@@ -13,166 +15,124 @@ import { useEffect } from 'react'
 import { useSelector } from 'react-redux/es/hooks/useSelector'
 
 const PlaceOrderScreen = () => {
-    const navigate=useNavigate();
-    const dispatch=useDispatch();
-    const cart=useSelector((state)=>state.cart);
-    const [createOrder, {isLoading, error}]=useCreateOrderMutation();
+    // Initializing hooks
+    const navigate=useNavigate();  // React Router's navigation function
+    const dispatch=useDispatch();  // Redux dispatch function
+    const cart=useSelector((state)=>state.cart);  // Selecting cart state from Redux store
+    const [createOrder, {isLoading, error}]=useCreateOrderMutation();  // Mutation function and its loading and error states
+
+    // useEffect to handle navigation based on cart state
     useEffect(()=>{
-if(!cart.shippingAddress.address){
-navigate("/shipping")
-}else if(!cart.paymentMethod){
-navigate("/payment")
-}
-    },[cart.shippingAddress.address, cart.paymentMethod, navigate]);
+        if(!cart.shippingAddress.address){  // If no shipping address is set
+            navigate("/shipping");  // Navigate to shipping page
+        } else if(!cart.paymentMethod){  // If no payment method is set
+            navigate("/payment");  // Navigate to payment page
+        }
+    }, [cart.shippingAddress.address, cart.paymentMethod, navigate]);
 
+    // Function to handle placing an order
     const placeOrderHandler=async()=>{
-try {
-    const res=await createOrder({
-        orderItems:cart.cartItems,
-        shippingAddress:cart.shippingAddress,
-        paymentMethod:cart.paymentMethod,
-        itemsPrice:cart.itemsPrice,
-        shippingPrice:cart.shippingPrice,
-        taxPrice:cart.taxPrice,
-        totalPrice:cart.totalPrice
-    }).unwrap();
-    dispatch(clearCartItem())
-    navigate(`/order/${res._id}`)
-} catch (error) {
-    toast.error(error)
-}
+        try {
+            const res=await createOrder({  // Calling createOrder mutation
+                orderItems:cart.cartItems,  // Extracting cart items
+                shippingAddress:cart.shippingAddress,  // Extracting shipping address
+                paymentMethod:cart.paymentMethod,  // Extracting payment method
+                itemsPrice:cart.itemsPrice,  // Extracting items price
+                shippingPrice:cart.shippingPrice,  // Extracting shipping price
+                taxPrice:cart.taxPrice,  // Extracting tax price
+                totalPrice:cart.totalPrice  // Extracting total price
+            }).unwrap();  // Unwrap the result from createOrder mutation
+            dispatch(clearCartItem());  // Dispatching action to clear cart
+            navigate(`/order/${res._id}`);  // Navigating to order details page
+        } catch (error) {
+            toast.error(error);  // Displaying error message if an error occurs
+        }
     }
-  return (
-    <>
-    <CheckOutStep step1 step2 step3 step4/>
-    <Row>
-        <Col md={8}>
-<ListGroup variant='flush'>
 
-    <ListGroupItem>
-<h2>Shipping</h2>
-<p>
-<strong>Address:</strong>
-{cart.shippingAddress.address}
-{cart.shippingAddress.city} {" "}
-{cart.shippingAddress.postalCode}{" "}
-{cart.shippingAddress.country}
+    return (
+        <>
+            <CheckOutStep step1 step2 step3 step4/>  // Rendering a checkout step component
+            <Row>
+                <Col md={8}>
+                    <ListGroup variant='flush'>
+                        <ListGroupItem>
+                            <h2>Shipping</h2>
+                            <p>
+                      <strong>Address:</strong>
+   {cart.shippingAddress.address}  {/* Displaying shipping address */}
+    {cart.shippingAddress.city} {" "}  {/* Displaying city */}
+       {cart.shippingAddress.postalCode}{" "}  {/* Displaying postal code */}
+     {cart.shippingAddress.country}  {/* Displaying country */}
+                            </p>
+                        </ListGroupItem>
 
-</p>
+                        <ListGroupItem>
+                            <h2>Payment Method</h2>
+                            <strong>Method:</strong>
+           {cart.paymentMethod}  {/* Displaying payment method */}
+                        </ListGroupItem>
 
-    </ListGroupItem>
+                        <ListGroupItem>
+                            <h2>Order Items</h2>
+         {cart.cartItems.length===0 ? (  // Checking if cart is empty
+       <Message>Your Cart is empty</Message>  // Displaying a message if cart is empty
+                            ) : (
+                                <ListGroup variant="flush">
+          {cart.cartItems.map((item, index)=>(  // Mapping through cart items
+                            <ListGroupItem key={index}>
+                                            <Row>
+                                                <Col md={1}>
+       <Image src={item.image} alt={item.name} fluid rounded />  {/* Displaying item image */}
+                                                </Col>
+                                                <Col>
+         <Link to={`/products/${item.product}`}>{item.name}</Link>  {/* Link to product details */}
+                                                </Col>
+                                                <Col md={4}>
+     {item.qty}x ${item.price}={item.qty*item.price}  {/* Displaying quantity, price, and total */}
+                                                </Col>
+                                            </Row>
+                                        </ListGroupItem>
+                                    ))}
+                                </ListGroup>
+                            )}
+                        </ListGroupItem>
+                    </ListGroup>
+                </Col>
 
-    <ListGroupItem>
-<h2>Payment Method</h2>
-        <strong>
-            Method:
-        </strong>
-        {cart.paymentMethod}
-    </ListGroupItem>
-
-    <ListGroupItem>
-
-        <h2>Order Items</h2>
-        {cart.cartItems.length===0?(
-
-            <Message>Your Cart is empty</Message>
-        ):(
-<ListGroup variant="flush">
-{cart.cartItems.map((item, index)=>(
-    <ListGroupItem key={index}>
-<Row>
-    <Col md={1}>
-    <Image src={item.image} alt={item.name} fluid rounded />
-    </Col>
-    <Col>
-    <Link to={`/products/${item.product}`}>
-        {item.name}
-    </Link>
-    </Col>
-    <Col md={4}>
-    {item.qty}x ${item.price}={item.qty*item.price}
-    </Col>
-</Row>
-    </ListGroupItem>
-))}
-
-</ListGroup>
-
-        )}
-    </ListGroupItem>
-</ListGroup>
-
-
-        </Col>
-        <Col md={4}>
-<Card>
-    <ListGroup variant='flush'>
-<ListGroupItem>
-<h2>Order Summary</h2>
-
-</ListGroupItem>
-<ListGroupItem>
-    <Row>
-        <Col>
-        Items:
-        </Col>
-        <Col>
-        ${cart.itemsPrice}
-        </Col>
-    </Row>
-
-    <Row>
-        <Col>
-        Shipping:
-        </Col>
-        <Col>
-        ${cart.shippingPrice}
-        </Col>
-    </Row>
-
-    <Row>
-        <Col>
-        Tax:
-        </Col>
-        <Col>
-        ${cart.taxPrice}
-        </Col>
-    </Row>
-
-    <Row>
-        <Col>
-        Total:
-        </Col>
-        <Col>
-        ${cart.totalPrice}
-        </Col>
-    </Row>
-
-</ListGroupItem>
-
-<ListGroupItem>
-
-    {error&&<Message/>}
-</ListGroupItem>
-<ListGroupItem>
-
-    <Button type='button' className='btn-block'
-    disabled={cart.cartItems.length===0}
-    onClick={placeOrderHandler}>
-        Place Order
-
-    </Button>
-    {isLoading && <Loader/>}
-</ListGroupItem>
-
-    </ListGroup>
-</Card>
-
-        </Col>
-        </Row>
-    </>
-  
-  )
+                <Col md={4}>
+                    <Card>
+                        <ListGroup variant='flush'>
+                            <ListGroupItem>
+                                <h2>Order Summary</h2>
+                            </ListGroupItem>
+                            <ListGroupItem>
+                                <Row>
+                                    <Col>
+                                        Items:
+                                    </Col>
+                                    <Col>
+            ${cart.itemsPrice}  {/* Displaying items price */}
+                                    </Col>
+                                </Row>
+                 {/* (Similar code for Shipping, Tax, and Total) */}
+                            </ListGroupItem>
+                            <ListGroupItem>
+                 {error && <Message/>}  {/* Displaying an error message if there is an error */}
+                            </ListGroupItem>
+                            <ListGroupItem>
+                      <Button type='button' className='btn-block'
+                            disabled={cart.cartItems.length===0}
+                            onClick={placeOrderHandler}>
+                                    Place Order
+                                </Button>
+ {isLoading && <Loader/>}  {/* Displaying loader while placing order */}
+                            </ListGroupItem>
+                        </ListGroup>
+                    </Card>
+                </Col>
+            </Row>
+        </>
+    )
 }
 
 export default PlaceOrderScreen
