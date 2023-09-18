@@ -3,12 +3,6 @@ import { Navigate, Outlet } from 'react-router-dom'
 import React from 'react'
 import { useSelector } from 'react-redux/es/hooks/useSelector'
 
-// Importing necessary modules from 'react-router-dom'
-
-
-
-// Importing React and the useSelector hook from 'react-redux'
-
 const PrivateRoute = () => {
     // Defining a functional component called PrivateRoute
 

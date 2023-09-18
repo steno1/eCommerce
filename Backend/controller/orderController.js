@@ -6,7 +6,8 @@ import asyncHandler from "../middleWare/asyncHandler.js";
 // Handler function for adding order items
 const addOrderItems = asyncHandler(async (req, res) => {
     // Destructuring properties from req.body
-    const { shippingAddress, orderItems, paymentMethod, itemPrice,
+    console.log(req.body);
+    const { shippingAddress, orderItems, paymentMethod, itemsPrice,
         taxPrice, shippingPrice, totalPrice } = req.body;
 
     // Checking if there are order items
@@ -24,7 +25,7 @@ const addOrderItems = asyncHandler(async (req, res) => {
             user: req.user._id,
             shippingAddress,
             paymentMethod,
-            itemPrice,
+            itemsPrice,
             taxPrice,
             shippingPrice,
             totalPrice

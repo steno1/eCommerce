@@ -18,8 +18,7 @@ import express from "express";
 // Creating an instance of the Express router.
 const router = express.Router();
 
-router.route("/").post(protect, addOrderItems)
-router.route("/").get(protect, admin, getOrders)
+router.route("/").post(protect, addOrderItems).get(protect, admin, getOrders)
 router.route("/mine").get(protect, getMyOrders)
 router.route("/:id").get(protect,admin, getMyOrdersById)
 router.route("/:id/pay").put(protect,updateOrderToPaid)

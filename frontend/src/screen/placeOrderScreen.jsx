@@ -19,7 +19,7 @@ const PlaceOrderScreen = () => {
     const navigate=useNavigate();  // React Router's navigation function
     const dispatch=useDispatch();  // Redux dispatch function
     const cart=useSelector((state)=>state.cart);  // Selecting cart state from Redux store
-    const [createOrder, {isLoading, error}]=useCreateOrderMutation();  // Mutation function and its loading and error states
+    const [createOrder, {isLoading, isError}]=useCreateOrderMutation();  // Mutation function and its loading and error states
 
     // useEffect to handle navigation based on cart state
     useEffect(()=>{
@@ -33,14 +33,14 @@ const PlaceOrderScreen = () => {
     // Function to handle placing an order
     const placeOrderHandler=async()=>{
         try {
-            const res=await createOrder({  // Calling createOrder mutation
-                orderItems:cart.cartItems,  // Extracting cart items
-                shippingAddress:cart.shippingAddress,  // Extracting shipping address
-                paymentMethod:cart.paymentMethod,  // Extracting payment method
-                itemsPrice:cart.itemsPrice,  // Extracting items price
-                shippingPrice:cart.shippingPrice,  // Extracting shipping price
-                taxPrice:cart.taxPrice,  // Extracting tax price
-                totalPrice:cart.totalPrice  // Extracting total price
+      const res=await createOrder({  // Calling createOrder mutation
+        orderItems:cart.cartItems,  // Extracting cart items
+       shippingAddress:cart.shippingAddress,  // Extracting shipping address
+     paymentMethod:cart.paymentMethod,  // Extracting payment method
+     itemsPrice:cart.itemsPrice,  // Extracting items price
+     shippingPrice:cart.shippingPrice,  // Extracting shipping price
+    taxPrice:cart.taxPrice,  // Extracting tax price
+     totalPrice:cart.totalPrice  // Extracting total price
             }).unwrap();  // Unwrap the result from createOrder mutation
             dispatch(clearCartItem());  // Dispatching action to clear cart
             navigate(`/order/${res._id}`);  // Navigating to order details page
@@ -49,9 +49,10 @@ const PlaceOrderScreen = () => {
         }
     }
 
+
     return (
         <>
-            <CheckOutStep step1 step2 step3 step4/>  // Rendering a checkout step component
+            <CheckOutStep step1 step2 step3 step4/>
             <Row>
                 <Col md={8}>
                     <ListGroup variant='flush'>
@@ -117,7 +118,7 @@ const PlaceOrderScreen = () => {
                  {/* (Similar code for Shipping, Tax, and Total) */}
                             </ListGroupItem>
                             <ListGroupItem>
-                 {error && <Message/>}  {/* Displaying an error message if there is an error */}
+                 {isError && <Message variant='danger'>{isError}</Message>}  {/* Displaying an error message if there is an error */}
                             </ListGroupItem>
                             <ListGroupItem>
                       <Button type='button' className='btn-block'
