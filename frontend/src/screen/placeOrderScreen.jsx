@@ -33,6 +33,7 @@ const PlaceOrderScreen = () => {
     // Function to handle placing an order
     const placeOrderHandler=async()=>{
         try {
+            
       const res=await createOrder({  // Calling createOrder mutation
         orderItems:cart.cartItems,  // Extracting cart items
        shippingAddress:cart.shippingAddress,  // Extracting shipping address
@@ -49,7 +50,6 @@ const PlaceOrderScreen = () => {
         }
     }
 
-
     return (
         <>
             <CheckOutStep step1 step2 step3 step4/>
@@ -59,12 +59,12 @@ const PlaceOrderScreen = () => {
                         <ListGroupItem>
                             <h2>Shipping</h2>
                             <p>
-                      <strong>Address:</strong>
-   {cart.shippingAddress.address}  {/* Displaying shipping address */}
-    {cart.shippingAddress.city} {" "}  {/* Displaying city */}
-       {cart.shippingAddress.postalCode}{" "}  {/* Displaying postal code */}
-     {cart.shippingAddress.country}  {/* Displaying country */}
-                            </p>
+    <strong>Address:</strong>
+    {cart.shippingAddress.address} {/* Displaying shipping address */}
+    {cart.shippingAddress.city} {" "} {/* Displaying city */}
+    {cart.shippingAddress.postalCode}{" "} {/* Displaying postal code */}
+    {cart.shippingAddress.country} {/* Displaying country */}
+</p>
                         </ListGroupItem>
 
                         <ListGroupItem>

@@ -64,6 +64,7 @@ const ShippingScreen = () => {
                         placeholder='Enter Address' 
                         value={address}
                         onChange={(e) => setAddress(e.target.value)}
+                        required
                     />
                 </FormGroup>
 
@@ -77,6 +78,7 @@ const ShippingScreen = () => {
                         placeholder='Enter Address' 
                         value={city}
                         onChange={(e) => setCity(e.target.value)}
+                        required
                     />
                 </FormGroup>
 
@@ -90,6 +92,7 @@ const ShippingScreen = () => {
                         placeholder='Enter Postal Code' 
                         value={postalCode}
                         onChange={(e) => setPostalCode(e.target.value)}
+                        required
                     />
                 </FormGroup>
 
@@ -103,6 +106,7 @@ const ShippingScreen = () => {
                         placeholder='Enter Country' 
                         value={country}
                         onChange={(e) => setCountry(e.target.value)}
+                        required
                     />
                 </FormGroup>
 
