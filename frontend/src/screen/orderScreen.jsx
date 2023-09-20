@@ -36,11 +36,11 @@ const OrderScreen = () => {
                                 {" "}{order.user.email}
                             </p>
                             <p>
-                                <strong>Address</strong>
-                                {" "}{order.shippingAddress.address},{" "}
-                                {order.shippingAddress.city}{" "}
-                                {order.shippingAddress.postalCode},{" "}
-                                {order.shippingAddress.country}
+                         <strong>Address</strong>
+                         {" "}{order.shippingAddress.address},{" "}
+                         {order.shippingAddress.city}{" "}
+                         {order.shippingAddress.postalCode},{" "}
+                        {order.shippingAddress.country}
                             </p>
 
                             {/* Display delivery status */}

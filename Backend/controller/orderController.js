@@ -56,8 +56,30 @@ const getMyOrdersById = asyncHandler(async (req, res) => {
 
 // Handler function for updating an order to paid
 const updateOrderToPaid = asyncHandler(async (req, res) => {
-    res.send(" update Order To Paid"); // Sending a response (not implemented)
+    // Finding the order by its ID
+    const order = await Order.findById(req.params.id);
+    if (order) {
+        // Setting the order as paid and recording the payment timestamp
+        order.isPaid = true;
+        order.paidAt = Date.now();
+        // Recording payment details
+        order.paymentResult = {
+            id: req.body.id,
+            status: req.body.status,
+            update_time: req.body.update_time,
+            email_address: req.body.payer.email_address
+        }
+        // Saving the updated order
+        const updatedOrder = await order.save();
+        // Responding with the updated order in JSON format
+        res.status(200).json(updatedOrder)
+    } else {
+        // If the order is not found, set status to 404 and throw an error
+        res.status(404);
+        throw new Error("Order not found")
+    }
 });
+
 
 // Handler function for updating an order to delivered
 const updateOrderToDelivered = asyncHandler(async (req, res) => {
