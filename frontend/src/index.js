@@ -17,6 +17,7 @@ import CartScreen from "./screen/cartScreen";
 import HomeScreen from "./screen/HomeScreen";
 import LoginScreen from "./screen/loginScreen";
 import OrderScreen from "./screen/orderScreen";
+import { PayPalScriptProvider } from "@paypal/react-paypal-js"
 import PaymentScreen from "./screen/paymentScreen";
 import PlaceOrderScreen from "./screen/placeOrderScreen";
 import PrivateRoute from "./components/privateRoute";
@@ -42,7 +43,6 @@ const router = createBrowserRouter(createRoutesFromElements(
       <Route path="/login" element={<LoginScreen/>}/>
       <Route path="/register" element={<RegisterScreen/>}/>
 
-      
       {/* Make ShippingScreen a private route */}
       <Route path='/' element={<PrivateRoute />}>
         <Route index={true} path="/" element={<PrivateRoute />}/>
@@ -61,8 +61,10 @@ root.render(
   <React.StrictMode>
     {/* Wrap the application with Redux Provider */}
     <Provider store={store}>
-      {/* Provide the router instance */}
-      <RouterProvider router={router}/>
+      {/* Provide the PayPalScriptProvider for PayPal integration */}
+      <PayPalScriptProvider>
+        <RouterProvider router={router}/>
+      </PayPalScriptProvider>
     </Provider>
   </React.StrictMode>
 );

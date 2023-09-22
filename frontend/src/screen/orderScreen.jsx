@@ -1,17 +1,107 @@
-import { Button, Card, Col, Form, Image, ListGroup, ListGroupItem, Row } from 'react-bootstrap'
-import { Link, useParams } from 'react-router-dom'
+import { Button, Card, Col, Form, Image, ListGroup, ListGroupItem, Row } from 'react-bootstrap'; // Importing necessary components from 'react-bootstrap'
+import { Link, useParams } from 'react-router-dom'; // Importing 'Link' and 'useParams' from 'react-router-dom'
+import { PayPalButtons, usePayPalScriptReducer } from '@paypal/react-paypal-js'; // Importing PayPal components and hooks
+import {
+useGetOrderDetailQuery,
+useGetPayPalClientIdQuery,
+usePayOrderMutation
+} from '../slices/ordersApiSlice';
 
-import Loader from '../components/Loader'
-import Message from '../components/Message'
-import React from 'react'
-import { useGetOrderDetailQuery } from '../slices/ordersApiSlice'
+import Loader from '../components/Loader'; // Importing 'Loader' component
+import Message from '../components/Message'; // Importing 'Message' component
+import React from 'react'; // Importing React
+import { toast } from 'react-toastify'; // Importing 'toast' for displaying notifications
+import { useEffect } from 'react'; // Importing 'useEffect' from React
+import { useSelector } from 'react-redux/es/hooks/useSelector'; // Importing Redux hooks for selecting state
+
+// Importing custom hooks for fetching order details, PayPal client ID, and paying order
 
 const OrderScreen = () => {
     // Extracts the 'id' parameter from the URL
-    const { id: orderId } = useParams();
+    const { id: orderId } = useParams(); // Destructuring 'id' parameter from URL using 'useParams'
     
     // Calls a custom hook 'useGetOrderDetailQuery' with 'orderId'
-    const { data: order, isLoading, isError, refetch } = useGetOrderDetailQuery(orderId);
+    const { data: order, isLoading, isError, refetch } = useGetOrderDetailQuery(orderId); // Fetching order details using custom hook
+
+    const [payOrder,{isLoading:loadingPay}]=usePayOrderMutation(); // Destructuring 'payOrder' mutation and 'loadingPay' flag
+    const [{isPending}, payPalDispatch]=usePayPalScriptReducer(); // Destructuring state and dispatch from PayPal script reducer
+    const {userInfo}=useSelector((state)=>state.auth); // Selecting 'userInfo' from Redux store
+    const {data:paypal,
+        isLoading:loadingPayPal,
+         error:errorPayPal}
+    =useGetPayPalClientIdQuery(); // Fetching PayPal client ID using custom hook
+
+   // Conditionally load PayPal script if necessary
+useEffect(() => {
+    // Check if there are no PayPal errors, PayPal is not currently loading, and we have a PayPal client ID
+    if (!errorPayPal && !loadingPayPal && paypal.clientId) {
+        
+        // Define a function to load the PayPal script
+        const loadPayPalScript = async () => {
+            // Dispatch an action to reset PayPal options with client ID and currency
+            payPalDispatch({
+                type:"resetOptions",
+                value:{
+                    "client-id":paypal.clientId,
+                    currency:"USD"
+                }
+            });
+
+            // Dispatch an action to set the loading status of PayPal to 'pending'
+            payPalDispatch({
+                type:"setLoadingStatus",
+                value:"pending"
+            })
+        }
+
+        // Check if we have order information and the order hasn't been paid yet
+        if (order && !order.isPaid) {
+            // Check if the PayPal object is not already available in the window
+            if (!window.paypal) {
+                // Load the PayPal script
+                loadPayPalScript();
+            }
+        }
+    }
+}, [order, paypal, payPalDispatch, loadingPayPal, errorPayPal]);
+// Conditionally load PayPal script if necessary
+
+function onApprove(data, actions) {
+    return actions.order.capture().then(async function (details) {
+        try {
+            await payOrder({orderId, details});
+            refetch();
+            toast.success("Payment Successful");
+        } catch (error) {
+            toast.error(error?.data?.message || error.message);
+        }
+    });
+}
+
+
+async function onApproveTest(){
+await payOrder({orderId, details:{payer:{}}})
+    refetch();
+    toast.success("Payment Successful")
+
+};
+function onError(error){
+    toast.error(error.message)
+};
+function createOrder(data, actions){
+return actions.order.create({
+    purchase_units:[
+        {
+            amount:{
+                value:order.totalPrice
+            }
+        }
+    ]
+}).then((orderId)=>{
+return orderId;
+})
+
+};
 
     // Conditional rendering based on loading state and error state
     return isLoading ? <Loader /> : isError ? <Message variant='danger' /> : (
@@ -36,11 +126,11 @@ const OrderScreen = () => {
                                 {" "}{order.user.email}
                             </p>
                             <p>
-                         <strong>Address</strong>
-                         {" "}{order.shippingAddress.address},{" "}
-                         {order.shippingAddress.city}{" "}
-                         {order.shippingAddress.postalCode},{" "}
-                        {order.shippingAddress.country}
+                                <strong>Address</strong>
+                                {" "}{order.shippingAddress.address},{" "}
+                                {order.shippingAddress.city}{" "}
+                                {order.shippingAddress.postalCode},{" "}
+                                {order.shippingAddress.country}
                             </p>
 
                             {/* Display delivery status */}
@@ -79,23 +169,23 @@ const OrderScreen = () => {
                         <ListGroupItem>
                             <h2>Order Items</h2>
 
-          {/* Map over order items and display details */}
-               {order.orderItems.map((item, index) => (
-                <ListGroupItem key={index}>
-                  <Row>
-                     <Col md={1}>
-             <Image src={item.image} alt={item.name} fluid rounded />
-                   </Col>
-                   <Col>
-                  <Link to={`/product/${item.product}`}>
-                   {item.name}
-                  </Link>
-                  </Col>
-                  <Col md={4}>
-                 {item.qty}x ${item.price} = ${item.qty * item.price}
-                 </Col>
-                  </Row>
-                     </ListGroupItem>
+                            {/* Map over order items and display details */}
+                            {order.orderItems.map((item, index) => (
+                                <ListGroupItem key={index}>
+                                    <Row>
+                                        <Col md={1}>
+                                            <Image src={item.image} alt={item.name} fluid rounded />
+                                        </Col>
+                                        <Col>
+                                            <Link to={`/product/${item.product}`}>
+                                                {item.name}
+                                            </Link>
+                                        </Col>
+                                        <Col md={4}>
+                                            {item.qty}x ${item.price} = ${item.qty * item.price}
+                                        </Col>
+                                    </Row>
+                                </ListGroupItem>
                             ))}
                         </ListGroupItem>
                     </ListGroup>
@@ -146,6 +236,30 @@ const OrderScreen = () => {
                                     </Col>
                                 </Row>
                             </ListGroupItem>
+
+                  {!order.isPaid && (
+                    <ListGroupItem>
+
+                        {loadingPay && <Loader/>}
+                        {isPending? <Loader/>:(
+                            <div>
+            <Button onClick={onApproveTest} style={{marginBottom:"10px"}}>
+                                    Test Pay Order
+                                    </Button>
+                                    <div>
+        
+                                    <PayPalButtons 
+                     createOrder={createOrder}
+                     onApprove={onApprove}
+                     onError={onError}
+                     > </PayPalButtons>
+                     
+                                    </div>
+                    
+                            </div>
+                        )}
+                    </ListGroupItem>
+                  )}          
                         </ListGroup>
                     </Card>
                 </Col>
@@ -154,4 +268,4 @@ const OrderScreen = () => {
     );
 };
 
-export default OrderScreen
+export default OrderScreen;

@@ -8,7 +8,8 @@ const initialState = {
     // It is initially set by retrieving data from the browser's local storage.
     // If there is 'userInfo' data in local storage, parse it as JSON and use it;
     // otherwise, set 'userInfo' to null.
-    userInfo: localStorage.getItem("userInfo") ? JSON.parse(localStorage.getItem("userInfo")) : null
+    userInfo: localStorage.getItem("userInfo") ?
+     JSON.parse(localStorage.getItem("userInfo")) : null
 };
 
 // Creating a Redux slice named "auth" with a reducer function
