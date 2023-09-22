@@ -65,43 +65,56 @@ useEffect(() => {
     }
 }, [order, paypal, payPalDispatch, loadingPayPal, errorPayPal]);
 // Conditionally load PayPal script if necessary
-
+// Function called when the payment is approved
 function onApprove(data, actions) {
     return actions.order.capture().then(async function (details) {
         try {
+            // Call payOrder with orderId and payment details
             await payOrder({orderId, details});
+            // Fetch order details again after successful payment
             refetch();
+            // Show a success toast message
             toast.success("Payment Successful");
         } catch (error) {
+            // If there's an error, show an error toast message
             toast.error(error?.data?.message || error.message);
         }
     });
 }
 
-
+// Function for a test scenario where payment is approved
 async function onApproveTest(){
-await payOrder({orderId, details:{payer:{}}})
+    // Simulate paying an order with orderId and empty payer details
+    await payOrder({orderId, details:{payer:{}}});
+    // Fetch order details again after successful payment
     refetch();
-    toast.success("Payment Successful")
+    // Show a success toast message
+    toast.success("Payment Successful");
+}
 
-};
+// Function called when an error occurs during payment
 function onError(error){
-    toast.error(error.message)
-};
-function createOrder(data, actions){
-return actions.order.create({
-    purchase_units:[
-        {
-            amount:{
-                value:order.totalPrice
-            }
-        }
-    ]
-}).then((orderId)=>{
-return orderId;
-})
+    // Show an error toast message with the error message
+    toast.error(error.message);
+}
 
-};
+// Function to create an order for PayPal
+function createOrder(data, actions){
+    return actions.order.create({
+        purchase_units:[
+            {
+                amount:{
+                    // Set the value of the order to the total price
+                    value:order.totalPrice
+                }
+            }
+        ]
+    }).then((orderId)=>{
+        // Return the orderId after creating the order
+        return orderId;
+    });
+}
+
 
     // Conditional rendering based on loading state and error state
     return isLoading ? <Loader /> : isError ? <Message variant='danger' /> : (
