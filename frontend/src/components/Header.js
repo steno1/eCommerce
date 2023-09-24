@@ -5,7 +5,6 @@ import { FaShoppingCart, FaUser } from "react-icons/fa"; // Corrected import for
 
 import { LinkContainer } from "react-router-bootstrap"; // Import LinkContainer for routing
 import React from 'react';
-import { UseSelector } from "react-redux/es/hooks/useSelector";
 import logo from "../assets/steno_logo.jpg"; // Import logo image.
 import { logout } from "../slices/authSlice";
 import { useDispatch } from "react-redux";
@@ -94,6 +93,24 @@ const Header = () => {
     </Nav.Link>
   </LinkContainer>
 )}
+
+  {userInfo && userInfo.isAdmin && ( 
+    <NavDropdown title="Admin" id="adminmenu">  
+     
+      <LinkContainer to="/admin/productlist"> 
+        <NavDropdown.Item>Product</NavDropdown.Item>
+      </LinkContainer> 
+      <LinkContainer to="/admin/userlist"> 
+        <NavDropdown.Item>User</NavDropdown.Item> 
+      </LinkContainer>  
+   <LinkContainer to="/admin/orderlist">  
+        <NavDropdown.Item>Orders</NavDropdown.Item>  
+      </LinkContainer>  
+   
+    </NavDropdown>  
+  ) 
+  }
+
             </Nav>
           </Navbar.Collapse>
         </Container>

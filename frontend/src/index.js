@@ -11,13 +11,15 @@ import {
    createRoutesFromElements
 } from "react-router-dom";
 
+import AdminRoute from "./components/AdminRoute"; // Importing AdminRoute component
 // Import application components
 import App from './App';
 import CartScreen from "./screen/cartScreen";
 import HomeScreen from "./screen/HomeScreen";
 import LoginScreen from "./screen/loginScreen";
+import OrderListScreen from "./screen/Admin/OrderListScreen";
 import OrderScreen from "./screen/orderScreen";
-import { PayPalScriptProvider } from "@paypal/react-paypal-js"
+import { PayPalScriptProvider } from "@paypal/react-paypal-js"; // Importing PayPalScriptProvider for PayPal integration
 import PaymentScreen from "./screen/paymentScreen";
 import PlaceOrderScreen from "./screen/placeOrderScreen";
 import PrivateRoute from "./components/privateRoute";
@@ -35,7 +37,7 @@ import store from "./store";
 const router = createBrowserRouter(createRoutesFromElements(
   <>
     {/* Main App route */}
-    <Route path="/" element={<App/>}>
+    <Route path="" element={<App/>}>
       {/* HomeScreen route */}
       <Route index={true} path="/" element={<HomeScreen/>}/>
       {/* ProductScreen route */}
@@ -45,7 +47,7 @@ const router = createBrowserRouter(createRoutesFromElements(
       <Route path="/register" element={<RegisterScreen/>}/>
 
       {/* Make ShippingScreen a private route */}
-      <Route path='/' element={<PrivateRoute />}>
+      <Route path='' element={<PrivateRoute />}>
         <Route index={true} path="/" element={<PrivateRoute />}/>
         <Route path="/shipping" element={<ShippingScreen/>}/>
         <Route path="/payment" element={<PaymentScreen/>}/>
@@ -53,6 +55,13 @@ const router = createBrowserRouter(createRoutesFromElements(
         <Route path="/order/:id" element={<OrderScreen/>}/>
         <Route path="/profile" element={<ProfileScreen/>}/>
       </Route>
+
+      {/* Make AdminRoute a route */}
+      <Route path='' element={<AdminRoute/>}>
+        <Route path="/admin/orderlist" element={<OrderListScreen/>}/>
+
+      </Route>
+
     </Route>
   </>
 ));

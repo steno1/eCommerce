@@ -45,7 +45,9 @@ const getMyOrders = asyncHandler(async (req, res) => {
 
 // Handler function for getting a specific order by ID
 const getMyOrdersById = asyncHandler(async (req, res) => {
-    const orderById = await Order.findById(req.params.id).populate("user", "name email"); // Finding order by ID and populating user info
+    const orderById = await Order.findById(req.params.id)
+    .populate("user", "name email"); 
+    // Finding order by ID and populating user info
     if (orderById) {
         res.status(200).json(orderById); // Responding with the order in JSON format
     } else {
@@ -88,7 +90,8 @@ const updateOrderToDelivered = asyncHandler(async (req, res) => {
 
 // Handler function for getting all orders (not implemented)
 const getOrders = asyncHandler(async (req, res) => {
-    res.send(" get all orders"); // Sending a response (not implemented)
+    const orders=await Order.find({}).populate("user", "id name");
+    res.status(200).json(orders)
 });
 
 // Exporting the handler functions
