@@ -1,4 +1,4 @@
-import { Button, Card, Col, Form, Image, ListGroup, ListGroupItem, Row } from 'react-bootstrap'; // Importing necessary components from 'react-bootstrap'
+import { Button, Card, Col, Image, ListGroup, ListGroupItem, Row } from 'react-bootstrap'; // Importing necessary components from 'react-bootstrap'
 import { Link, useParams } from 'react-router-dom'; // Importing 'Link' and 'useParams' from 'react-router-dom'
 import { PayPalButtons, usePayPalScriptReducer } from '@paypal/react-paypal-js'; // Importing PayPal components and hooks
 import {
@@ -24,7 +24,7 @@ const OrderScreen = () => {
     // Calls a custom hook 'useGetOrderDetailQuery' with 'orderId'
     const { data: order, isLoading, isError, refetch }
      = useGetOrderDetailQuery(orderId); // Fetching order details using custom hook
-const [deliverOrder, {isLoading:loadingDeliver, error}]=useDeliverOrderMutation();
+const [deliverOrder, {isLoading:loadingDeliver}]=useDeliverOrderMutation();
     const [payOrder,{isLoading:loadingPay}]=usePayOrderMutation(); // Destructuring 'payOrder' mutation and 'loadingPay' flag
     const [{isPending}, payPalDispatch]=usePayPalScriptReducer(); // Destructuring state and dispatch from PayPal script reducer
     const {userInfo}=useSelector((state)=>state.auth); // Selecting 'userInfo' from Redux store
