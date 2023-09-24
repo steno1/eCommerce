@@ -85,7 +85,16 @@ const updateOrderToPaid = asyncHandler(async (req, res) => {
 
 // Handler function for updating an order to delivered
 const updateOrderToDelivered = asyncHandler(async (req, res) => {
-    res.send(" update Order To Delivered"); // Sending a response (not implemented)
+    const order=await Order.findById(req.params.id);
+    if(order){
+order.isDelivered=true;
+order.deliveredAt=Date.now();
+const updatedOrder=await order.save();
+res.status(200).json(updatedOrder);
+    }else{
+        res.status(404);
+        throw new Error("Order not Found")
+    }
 });
 
 // Handler function for getting all orders (not implemented)

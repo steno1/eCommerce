@@ -2,6 +2,7 @@ import { Button, Card, Col, Form, Image, ListGroup, ListGroupItem, Row } from 'r
 import { Link, useParams } from 'react-router-dom'; // Importing 'Link' and 'useParams' from 'react-router-dom'
 import { PayPalButtons, usePayPalScriptReducer } from '@paypal/react-paypal-js'; // Importing PayPal components and hooks
 import {
+useDeliverOrderMutation,
 useGetOrderDetailQuery,
 useGetPayPalClientIdQuery,
 usePayOrderMutation
@@ -21,8 +22,9 @@ const OrderScreen = () => {
     const { id: orderId } = useParams(); // Destructuring 'id' parameter from URL using 'useParams'
     
     // Calls a custom hook 'useGetOrderDetailQuery' with 'orderId'
-    const { data: order, isLoading, isError, refetch } = useGetOrderDetailQuery(orderId); // Fetching order details using custom hook
-
+    const { data: order, isLoading, isError, refetch }
+     = useGetOrderDetailQuery(orderId); // Fetching order details using custom hook
+const [deliverOrder, {isLoading:loadingDeliver, error}]=useDeliverOrderMutation();
     const [payOrder,{isLoading:loadingPay}]=usePayOrderMutation(); // Destructuring 'payOrder' mutation and 'loadingPay' flag
     const [{isPending}, payPalDispatch]=usePayPalScriptReducer(); // Destructuring state and dispatch from PayPal script reducer
     const {userInfo}=useSelector((state)=>state.auth); // Selecting 'userInfo' from Redux store
@@ -114,7 +116,15 @@ function createOrder(data, actions){
         return orderId;
     });
 }
-
+const deliveredHandler=async()=>{
+try {
+    await deliverOrder(orderId);
+    refetch();
+    toast.success("Order delivered")
+} catch (err) {
+   toast.error(err?.data?.message || err.message) 
+}
+}
 
     // Conditional rendering based on loading state and error state
     return isLoading ? <Loader /> : isError ? <Message variant='danger' /> : (
@@ -139,11 +149,11 @@ function createOrder(data, actions){
                                 {" "}{order.user.email}
                             </p>
                             <p>
-                                <strong>Address</strong>
-                                {" "}{order.shippingAddress.address},{" "}
-                                {order.shippingAddress.city}{" "}
-                                {order.shippingAddress.postalCode},{" "}
-                                {order.shippingAddress.country}
+                       <strong>Address</strong>
+                       {" "}{order.shippingAddress.address},{" "}
+                       {order.shippingAddress.city}{" "}
+                        {order.shippingAddress.postalCode},{" "}
+                       {order.shippingAddress.country}
                             </p>
 
                             {/* Display delivery status */}
@@ -182,20 +192,20 @@ function createOrder(data, actions){
                         <ListGroupItem>
                             <h2>Order Items</h2>
 
-                            {/* Map over order items and display details */}
-                            {order.orderItems.map((item, index) => (
-                                <ListGroupItem key={index}>
-                                    <Row>
-                                        <Col md={1}>
-                                            <Image src={item.image} alt={item.name} fluid rounded />
+                      {/* Map over order items and display details */}
+                 {order.orderItems.map((item, index) => (
+                    <ListGroupItem key={index}>
+                             <Row>
+                               <Col md={1}>
+             <Image src={item.image} alt={item.name} fluid rounded />
                                         </Col>
                                         <Col>
-                                            <Link to={`/product/${item.product}`}>
+                        <Link to={`/product/${item.product}`}>
                                                 {item.name}
                                             </Link>
                                         </Col>
                                         <Col md={4}>
-                                            {item.qty}x ${item.price} = ${item.qty * item.price}
+                {item.qty}x ${item.price} = ${item.qty * item.price}
                                         </Col>
                                     </Row>
                                 </ListGroupItem>
@@ -256,7 +266,7 @@ function createOrder(data, actions){
                         {loadingPay && <Loader/>}
                         {isPending? <Loader/>:(
                             <div>
-            <Button onClick={onApproveTest} style={{marginBottom:"10px"}}>
+    <Button onClick={onApproveTest} style={{marginBottom:"10px"}}>
                                     Test Pay Order
                                     </Button>
                                     <div>
@@ -272,7 +282,18 @@ function createOrder(data, actions){
                             </div>
                         )}
                     </ListGroupItem>
-                  )}          
+                  )}  
+                  {loadingDeliver&&<Loader/>}   
+                  {userInfo && userInfo.isAdmin && order.isPaid 
+                  && !order.isDelivered && (
+                    <ListGroupItem>
+<Button type='button' className='btn-btn-block'
+ onClick={deliveredHandler}>
+Mark as Delivered
+</Button>
+
+                    </ListGroupItem>
+                  )}     
                         </ListGroup>
                     </Card>
                 </Col>
