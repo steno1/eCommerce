@@ -40,6 +40,14 @@ const productSchema = new mongoose.Schema({
         type: String,  // Field stores a string (URL to the image)
         required: true // Field is required
     },
+    brand: {
+        type: String,
+        required: true,
+      },
+      description: {
+        type: String,
+        required: true,
+      },
     category: {
         type: String, // Field stores a string (category of the product)
         required: true // Field is required

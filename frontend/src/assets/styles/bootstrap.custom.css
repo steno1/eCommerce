@@ -432,10 +432,13 @@ figure {
   margin: 0 0 1rem;
 }
 
-img,
-svg {
+img{
   vertical-align: middle;
   height: 7.5rem;
+}
+svg {
+  vertical-align: middle;
+  
 }
 
 table {

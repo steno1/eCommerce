@@ -23,6 +23,7 @@ import { PayPalScriptProvider } from "@paypal/react-paypal-js"; // Importing Pay
 import PaymentScreen from "./screen/paymentScreen";
 import PlaceOrderScreen from "./screen/placeOrderScreen";
 import PrivateRoute from "./components/privateRoute";
+import ProductEditScreen from "./screen/Admin/ProductEditScreen";
 import ProductListScreen from "./screen/Admin/productListScreen";
 import ProductScreen from "./screen/ProductScreen";
 import ProfileScreen from "./screen/profileScreen";
@@ -61,6 +62,8 @@ const router = createBrowserRouter(createRoutesFromElements(
       <Route path='' element={<AdminRoute/>}>
         <Route path="/admin/orderlist" element={<OrderListScreen/>}/>
         <Route path="/admin/productlist" element={<ProductListScreen/>}/>
+        <Route path="/admin/product/:id/edit" element={<ProductEditScreen/>}/>
+      
       </Route>
 
     </Route>
