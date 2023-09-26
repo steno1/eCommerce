@@ -1,28 +1,18 @@
-// Import the 'connectDB' function from the 'db.js' file
+// Importing middleware and modules/packages
 
-import { errorHandler, notFound } from "./middleWare/errorMiddleWare.js";
+import { errorHandler, notFound } from "./middleWare/errorMiddleWare.js"; // Importing custom error handling middleware
 
-import connectDB from "./config/db.js";
-import cookieParser from "cookie-parser";
-import dotenv from "dotenv";
-import express from "express";
-import orderRoutes from "./Routes/orderRoutes.js";
-import productRoutes from "./Routes/ProductsRoutes.js";
-import userRoutes from "./Routes/userRoute.js";
+import connectDB from "./config/db.js"; // Importing a function to connect to the database
+import cookieParser from "cookie-parser"; // Middleware to parse cookies in incoming requests
+import dotenv from "dotenv"; // Loading environment variables
+import express from "express"; // Importing the Express framework
+import orderRoutes from "./Routes/orderRoutes.js"; // Importing routes for orders
+import path from "path"; // Importing the Node.js 'path' module for file paths
+import productRoutes from "./Routes/ProductsRoutes.js"; // Importing routes for products
+import uploadRoutes from "./Routes/uploadRoutes.js"; // Importing routes for uploads
+import userRoutes from "./Routes/userRoute.js"; // Importing routes for users
 
-// Import custom error handling middleware
-
-
-// Import necessary packages for configuration and functionality
-
-
-
-
-
-
-
-// Load environment variables from the '.env' file
-dotenv.config();
+dotenv.config(); // Load environment variables
 
 // Define the port number on which the server will run, using the 'PORT' environment variable or default to 5000
 const port = process.env.PORT || 5000;
@@ -49,12 +39,16 @@ app.get("/", (req, res) => {
 app.use(`/api/products`, productRoutes);
 app.use(`/api/users`, userRoutes);
 app.use(`/api/orders`, orderRoutes);
+app.use(`/api/upload`, uploadRoutes);
 
 // Set up a route to handle PayPal configuration
 app.get("/api/config/paypal", (req, res) => {
     // Send PayPal client ID from environment variables
     res.send({ clientId: process.env.payPal_client_Id });
 });
+
+const __dirname=path.resolve();
+app.use("/uploads", express.static(path.join(__dirname, "/uploads"))); // Serve static files in '/uploads' directory
 
 // Apply custom 'notFound' and 'errorHandler' middleware for handling errors
 app.use(notFound);
