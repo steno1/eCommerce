@@ -2,7 +2,7 @@
 
 import { Button, Col, Row, Table } from 'react-bootstrap'; // Importing specific components from react-bootstrap
 import { FaEdit, FaTrash } from 'react-icons/fa'; // Importing specific icons from react-icons
-import { useCreateProductMutation, useGetProductsQuery } from '../../slices/productApiSlice'; // Importing hooks for creating products and getting products from the product API slice
+import { useCreateProductMutation, useDeleteProductMutation, useGetProductsQuery } from '../../slices/productApiSlice'; // Importing hooks for creating products and getting products from the product API slice
 
 import { LinkContainer } from 'react-router-bootstrap'; // Importing a container for links
 import Loader from '../../components/Loader'; // Importing a loader component
@@ -17,9 +17,18 @@ const ProductListScreen = () => {
     // Using the useCreateProductMutation hook to create a new product
     const [createProduct, { isLoading: loadingCreate }] = useCreateProductMutation();
 
+    const [deleteProduct, {isLoading:loadingDelete}]=useDeleteProductMutation();
+
     // Handler for deleting a product
-    const deleteHandler = (productId) => {
-        console.log("delete", productId);
+    const deleteHandler = async(id) => {
+      if(window.confirm("Are sure you want to delete the product?")){
+try {
+    await deleteProduct(id);
+    refetch();
+} catch (err) {
+    toast.error(err?.data?.message || err.error)
+}
+      }
     }
 
     // Handler for creating a new product
@@ -54,6 +63,8 @@ const ProductListScreen = () => {
             </Row>
             {/* Conditional rendering based on loadingCreate */}
             {loadingCreate && <Loader/>}
+              {/* Conditional rendering based on loadingDelete*/}
+            {loadingDelete && <Loader/>}
             {/* Conditional rendering based on isLoading */}
             {isLoading ? (
                 <Loader/>

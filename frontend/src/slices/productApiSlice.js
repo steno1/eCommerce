@@ -2,7 +2,8 @@
 
 // Importing the URL constant for products
 
-import { PRODUCTS_URL } from "../constant";
+import { PRODUCTS_URL, UPLOADS_URL } from "../constant";
+
 import { apiSlice } from "./apiSlice";
 
 // Importing the apiSlice module
@@ -48,8 +49,24 @@ export const productsApiSlice = apiSlice.injectEndpoints({
       }),
 
       invalidatesTags: ["Product"] // This invalidates data with the "Product" tag after update
+    }),
+    uploadProductImage:builder.mutation({
+query:(data)=>({
+  url:`${UPLOADS_URL}`,
+  method:"POST",
+  body:data
+})
+
+    }),
+    deleteProduct:builder.mutation({
+      query:(productId)=>({
+        url:`${PRODUCTS_URL}/${productId}`,
+        method:"DELETE"
+      
+      })
     })
   }),
+  
 });
 
 // Extract the generated query hook from productsApiSlice
@@ -57,5 +74,7 @@ export const {
   useGetProductDetailsQuery,
   useCreateProductMutation,
   useGetProductsQuery,
-  useUpdateProductMutation
+  useUpdateProductMutation,
+   useUploadProductImageMutation,
+   useDeleteProductMutation
 } = productsApiSlice;

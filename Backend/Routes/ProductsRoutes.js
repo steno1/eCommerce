@@ -1,12 +1,17 @@
 // Import the controller functions for handling requests
 
 import { admin, protect } from "../middleWare/AuthMiddleWare.js";
-import { createProduct, getProductById, getProducts, updateProduct } from "../controller/productController.js";
+import {
+     createProduct,
+     deleteProduct,
+     getProductById,
+     getProducts,
+     updateProduct
+} from "../controller/productController.js";
 
 import express from "express";
 
 // Import the express module
-
 
 // Create an instance of the Express router
 const router = express.Router();
@@ -26,6 +31,10 @@ router.route("/").post(protect, admin, createProduct);
 // When a PUT request with an ID parameter is made to '/:id', the updateProduct function will be called.
 // The protect and admin middlewares are used to ensure only authenticated and authorized users can update products.
 router.route("/:id").put(protect, admin, updateProduct);
+
+// When a DELETE request with an ID parameter is made to '/:id', the deleteProduct function will be called.
+// The protect and admin middlewares are used to ensure only authenticated and authorized users can delete products.
+router.route("/:id").delete(protect, admin, deleteProduct);
 
 // Export the router to be used in other parts of the application
 export default router;

@@ -11,6 +11,7 @@ import React from 'react'
 import {toast} from "react-toastify"
 import { useGetProductDetailsQuery } from '../../slices/productApiSlice'
 import { useUpdateProductMutation } from '../../slices/productApiSlice'
+import { useUploadProductImageMutation } from '../../slices/productApiSlice'
 
 const ProductEditScreen = () => {
     // Extracting 'id' parameter from URL using 'useParams' hook.
@@ -30,6 +31,9 @@ const ProductEditScreen = () => {
 
     // Mutation for updating product details.
     const [updateProduct, { isLoading: loadingUpdate }] = useUpdateProductMutation();
+
+    // Mutation for uploading product image.
+    const [uploadProductImage, {isLoading:loadingUpload}]=useUploadProductImageMutation();
 
     // Function to navigate to a different page.
     const navigate = useNavigate();
@@ -75,6 +79,31 @@ const ProductEditScreen = () => {
         }
     }
 
+   // Function to handle file upload.
+const uploadFileHandler = async (e) => {
+    // Creating a new FormData object to handle file uploads.
+    const formData = new FormData();
+
+    // Appending the selected file to the FormData object with the key "image".
+    formData.append("image", e.target.files[0])
+
+    try {
+        // Making an asynchronous call to upload the product image using 'uploadProductImage' mutation function.
+        const res = await uploadProductImage(formData).unwrap();
+        
+        // If the upload is successful, display a success message.
+        toast.success(res.message);
+        
+        // Set the uploaded image URL in the component state.
+        setImage(res.image)
+    } catch (error) {
+        // If there is an error during the upload, display an error message.
+        // Check if there is a specific error message in the response data, otherwise display a generic error message.
+        toast.error(error?.data?.message || error.error);
+    }
+}
+
+
     // Rendering the component.
     return (
         <>
@@ -87,15 +116,15 @@ const ProductEditScreen = () => {
                 <h1>Edit Product</h1>
                 {/* Displaying a loader while updating the product. */}
                 {loadingUpdate && <Loader />}
-          {/* Displaying loader or error message while fetching product data. */}
+                {/* Displaying loader or error message while fetching product data. */}
                 {isLoading ? <Loader /> : error ? (
                     <Message variant="danger">{error}</Message>
                 ) : (
                     // Rendering the product edit form.
                     <Form onSubmit={submitHandler}>
-                 {/* Form fields for editing product details. */}
-         {/* Each field has a label, input, and onChange handler. */}
-     {/* The value of each input is controlled by state variables. */}
+                        {/* Form fields for editing product details. */}
+                        {/* Each field has a label, input, and onChange handler. */}
+                        {/* The value of each input is controlled by state variables. */}
                         <FormGroup controlId='name' className='my-2'>
                             <FormLabel>Name</FormLabel>
                             <FormControl
@@ -116,6 +145,21 @@ const ProductEditScreen = () => {
                             </FormControl>
                         </FormGroup>
 
+                        <FormGroup controlId='image' className='my-2'>
+                            <FormLabel>Image</FormLabel>
+                            <FormControl
+                                type="text"
+                                placeholder='Enter image url'
+                                value={image}
+                     onChange={(e) => setImage(e.target.value)}>
+                            </FormControl>
+
+                            <FormControl
+                                type='file' label="Choose file"
+                                onChange={uploadFileHandler}>
+                            </FormControl>
+                        </FormGroup>
+
                         <FormGroup controlId='brand' className='my-2'>
                             <FormLabel>Brand</FormLabel>
                             <FormControl
@@ -126,13 +170,13 @@ const ProductEditScreen = () => {
                             </FormControl>
                         </FormGroup>
 
-                 <FormGroup controlId='category' className='my-2'>
+                        <FormGroup controlId='category' className='my-2'>
                             <FormLabel>Category</FormLabel>
                             <FormControl
                                 type="text"
                                 placeholder='Enter category'
                                 value={category}
-                    onChange={(e) => setCategory(e.target.value)}>
+                                onChange={(e) => setCategory(e.target.value)}>
                             </FormControl>
                         </FormGroup>
 
@@ -142,7 +186,7 @@ const ProductEditScreen = () => {
                                 type="number"
                                 placeholder='Count in stock'
                                 value={countInStock}
-                    onChange={(e) => setCountInStock(e.target.value)}>
+                                onChange={(e) => setCountInStock(e.target.value)}>
                             </FormControl>
                         </FormGroup>
 
@@ -152,7 +196,7 @@ const ProductEditScreen = () => {
                                 type="text"
                                 placeholder='Description'
                                 value={description}
-                    onChange={(e) => setDescription(e.target.value)}>
+                                onChange={(e) => setDescription(e.target.value)}>
                             </FormControl>
                         </FormGroup>       
 

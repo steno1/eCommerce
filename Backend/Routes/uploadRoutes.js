@@ -38,8 +38,6 @@ const upload = multer({
  storage, // Specifies the storage engine defined above
 });
 
-
-
 // Handling a POST request to the root path
 router.post("/", upload.single("image"), (req, res) => {
     // Handles the uploaded file using Multer middleware (single file with field name "image")

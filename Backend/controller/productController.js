@@ -5,7 +5,6 @@ import asyncHandler from "../middleWare/asyncHandler.js";
 
 // Import the asyncHandler middleware for handling asynchronous operations
 
-
 // Controller function to get all products
 const getProducts = asyncHandler(async (req, res) => {
     // Fetch all products from the database
@@ -82,5 +81,31 @@ const updateProduct = asyncHandler(async (req, res) => {
   }
 });
 
+// Define a controller function named deleteProduct which handles deletion of a product
+const deleteProduct = asyncHandler(async (req, res) => {
+    // Find the product in the database based on the provided ID
+    const product = await Product.findById(req.params.id);
+
+    // Check if a product with the provided ID was found
+    if (product) {
+        // If product is found, proceed with deletion
+        await Product.deleteOne({
+            _id: product._id // Delete the product with matching ID
+        });
+        
+        // Send a JSON response with a 200 status code to indicate success
+        res.status(200).json({
+            message: "Product deleted" // Provide a success message
+        });      
+    } else {
+        // If the product is not found, set a 404 status
+        res.status(404);
+
+        // Throw an error to be caught by the error handling middleware
+        throw new Error("Product not found");  
+    }
+});
+
 // Export the controller functions to be used in other parts of the application
-export { getProductById, getProducts, createProduct, updateProduct };
+export { getProductById, getProducts, 
+    createProduct, updateProduct,deleteProduct };
