@@ -18,7 +18,6 @@ const ProductListScreen = () => {
     const [createProduct, { isLoading: loadingCreate }] = useCreateProductMutation();
 
     const [deleteProduct, {isLoading:loadingDelete}]=useDeleteProductMutation();
-
     // Handler for deleting a product
     const deleteHandler = async(id) => {
       if(window.confirm("Are sure you want to delete the product?")){
@@ -65,6 +64,8 @@ try {
             {loadingCreate && <Loader/>}
               {/* Conditional rendering based on loadingDelete*/}
             {loadingDelete && <Loader/>}
+            
+
             {/* Conditional rendering based on isLoading */}
             {isLoading ? (
                 <Loader/>

@@ -1,12 +1,7 @@
 // Import necessary constants and modules
 
-// Importing the URL constant for users
-
-import { USERS_URL } from "../constant";
-import { apiSlice } from "./apiSlice";
-
-// Importing the apiSlice module
-
+import { USERS_URL } from "../constant"; // Importing the URL constant for users
+import { apiSlice } from "./apiSlice"; // Importing the apiSlice module
 
 // Create a usersApiSlice using apiSlice.injectEndpoints
 export const usersApiSlice = apiSlice.injectEndpoints({
@@ -55,6 +50,33 @@ export const usersApiSlice = apiSlice.injectEndpoints({
       providesTags: ["Users"], // Cache tag for users data
       keepUnusedDataFor: 5, // Keep unused data for 5 seconds
     }),
+
+    // Define an endpoint to delete a user
+    deleteUser: builder.mutation({
+      query: (userId) => ({
+        url: `${USERS_URL}/${userId}`, // The URL for sending a DELETE request to delete a user
+        method: "DELETE", // HTTP method for the request
+      }),
+    }),
+
+    // Define an endpoint to get user details
+    getUserDetails: builder.query({
+      query: (userId) => ({
+        url: `${USERS_URL}/${userId}`, // The URL for fetching user details
+      }),
+      keepUnusedDataFor: 5, // Keep unused data for 5 seconds
+    }),
+
+    // Define an endpoint to update user information
+    updateUser: builder.mutation({
+      query: (data) => ({
+        url: `${USERS_URL}/${data.userId}`, // The URL for sending a PUT request to update user information
+        method: "PUT", // HTTP method for the request
+        body: data, // The request body containing updated user data
+      }),
+      invalidatesTags: ['User'] // Invalidate cache for 'User' after update
+    })
+
   }),
 });
 
@@ -64,5 +86,8 @@ export const {
   useLogoutMutation,
   useRegisterMutation,
   useProfileMutation,
-  useGetUsersQuery
+  useGetUsersQuery,
+  useGetUserDetailsQuery,
+  useDeleteUserMutation,
+  useUpdateUserMutation
 } = usersApiSlice;
