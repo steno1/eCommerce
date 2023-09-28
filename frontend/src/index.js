@@ -32,6 +32,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import RegisterScreen from "./screen/RegisterScreen";
 import ShippingScreen from "./screen/shippingScreen";
+import UserListScreen from "./screen/Admin/userListScreen";
 // Import Redux store configuration
 import store from "./store";
 
@@ -63,7 +64,7 @@ const router = createBrowserRouter(createRoutesFromElements(
         <Route path="/admin/orderlist" element={<OrderListScreen/>}/>
         <Route path="/admin/productlist" element={<ProductListScreen/>}/>
         <Route path="/admin/product/:id/edit" element={<ProductEditScreen/>}/>
-      
+        <Route path="/admin/userlist" element={<UserListScreen/>}/>
       </Route>
 
     </Route>

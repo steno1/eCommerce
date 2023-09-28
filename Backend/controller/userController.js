@@ -140,24 +140,65 @@ const updateUserProfile = asyncHandler(async (req, res) => {
 });
 
 // Defining the getUsers function with asyncHandler middleware.
-const getUsers = asyncHandler((req, res) => {
-  res.send("get users"); // Sending a response with a message indicating fetching all users.
+const getUsers = asyncHandler(async(req, res) => {
+  const users= await User.find({}) // Fetch all users from the database.
+  if(users){
+    res.status(200).json(users) // If users are found, respond with a JSON array of users with a 200 status.
+  }else{
+    res.status(404).json("Users not found") // If no users are found, respond with a 404 status and a message.
+  }
 });
 
 // Defining the getUserById function with asyncHandler middleware.
-const getUserById = asyncHandler((req, res) => {
-  res.send("update User Profile"); // Sending a response with a message indicating fetching a user by ID.
+const getUserById = asyncHandler(async(req, res) => {
+  const user=await User.findById(req.params.id).select("-password") // Find a user by their unique ID, excluding their password.
+  if(user){
+    res.status(200).json(user) // If user is found, respond with a JSON object of the user with a 200 status.
+  }else{
+    res.status(404); // If user is not found, set a 404 status.
+    throw new Error("User not found") // Throw an error to indicate that the user was not found.
+  }
 });
 
 // Defining the updateUser function with asyncHandler middleware.
-const updateUser = asyncHandler((req, res) => {
-  res.send("update User Profile"); // Sending a response with a message indicating updating a user by ID.
+const updateUser = asyncHandler(async(req, res) => {
+  const user=await User.findById(req.params.id) // Find a user by their unique ID.
+  if(user){
+    user.name=req.body.name || user.name; // Update user's name with the provided value, or keep it unchanged.
+    user.email=req.body.email || user.email; // Update user's email with the provided value, or keep it unchanged.
+    user.isAdmin=Boolean(req.body.isAdmin); // Update user's isAdmin status with the provided value.
+
+   const updatedUser = await user.save(); // Save the updated user object back to the database.
+
+res.status(200).json({
+  _id: updatedUser._id, // Respond with a JSON object of the updated user details.
+  name: updateUser.name, // Include the updated user's name.
+  email: updateUser.email, // Include the updated user's email.
+  isAdmin: updatedUser.isAdmin // Include the updated user's isAdmin status.
+});
+
+  }else{
+    res.status(404); // If user is not found, set a 404 status.
+    throw new Error("User not found") // Throw an error to indicate that the user was not found.
+  }
 });
 
 // Defining the deleteUser function with asyncHandler middleware.
-const deleteUser = asyncHandler((req, res) => {
-  res.send("delete user"); // Sending a response with a message indicating user deletion.
+const deleteUser = asyncHandler(async(req, res) => {
+  const user=await User.findById(req.params.id) // Find a user by their unique ID.
+  if(user){
+    if(user.isAdmin){
+      res.status(400);
+      throw new Error("Cannot delete admin user") // If user is an admin, respond with a 400 status and a message.
+    }
+    await User.deleteOne({_id:user._id}) // Delete the user from the database.
+    res.status(200).json({message:"User deleted successfully"}) // Respond with a message indicating successful deletion.
+  }else{
+    res.status(404); // If user is not found, set a 404 status.
+    throw new Error("User not found") // Throw an error to indicate that the user was not found.
+  }
 });
+
 
 // Exporting all the defined functions as part of a named export.
 export {
