@@ -37,7 +37,7 @@ router.route("/:id").put(protect, admin, updateProduct);
 // The protect and admin middlewares are used to ensure only authenticated and authorized users can delete products.
 router.route("/:id").delete(protect, admin, deleteProduct);
 
-router.route("/:id/reviews").post(protect,createProduct);
+router.route("/:id/reviews").post(protect,createProductReview);
 
 // Export the router to be used in other parts of the application
 export default router;
