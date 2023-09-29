@@ -64,6 +64,14 @@ query:(data)=>({
         method:"DELETE"
       
       })
+    }),
+    createReview:builder.mutation({
+      query:(data)=>({
+        url:`${PRODUCTS_URL}/${data.productId}/reviews`,
+        method:'POST',
+        body:data
+      }),
+      invalidatesTags:['Product']
     })
   }),
   
@@ -76,5 +84,5 @@ export const {
   useGetProductsQuery,
   useUpdateProductMutation,
    useUploadProductImageMutation,
-   useDeleteProductMutation
+   useDeleteProductMutation, useCreateReviewMutation
 } = productsApiSlice;

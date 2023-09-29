@@ -1,7 +1,8 @@
 // Import necessary components and modules from external libraries
 
-import { Button, Card, Col, Form, Image, ListGroup, Row } from 'react-bootstrap';
+import { Button, Card, Col, Form, FormControl, FormGroup, FormLabel, Image, ListGroup, ListGroupItem, Row } from 'react-bootstrap';
 import React, { useState } from 'react'; // Import useState hook
+import { useDispatch, useSelector } from 'react-redux'; // Import useDispatch hook
 import { useNavigate, useParams } from 'react-router-dom'; // Import necessary hooks
 
 import { Link } from 'react-router-dom';
@@ -9,7 +10,8 @@ import Loader from '../components/Loader';
 import Message from '../components/Message';
 import Rating from '../components/Rating';
 import { addToCart } from '../slices/cardSlice'; // Import the addToCart action from Redux slice
-import { useDispatch } from 'react-redux'; // Import useDispatch hook
+import {toast} from "react-toastify"
+import { useCreateReviewMutation } from '../slices/productApiSlice';
 import { useGetProductDetailsQuery } from '../slices/productApiSlice';
 
 // Functional component representing the product details screen
@@ -25,10 +27,18 @@ const ProductScreen = () => {
 
   // Using useState to manage the quantity selected by the user
   const [qty, setQty] = useState(1);
+  const [rating, setRating]=useState(0);
+  const [comment, setComment]=useState("")
+
 
   // Fetching product details using a Redux Toolkit query
-  const { data: product, isLoading, error } = useGetProductDetailsQuery(productId);
-
+  const { data: product,
+     isLoading, 
+     refetch,
+     error } = useGetProductDetailsQuery(productId);
+const [createReview, {isLoading:loadingProductReview}]=
+useCreateReviewMutation();
+const {userInfo}=useSelector((state)=>state.auth)
   // Styling for the container holding product information
   const containerStyle = {
     backgroundColor: '#FAE392',
@@ -49,6 +59,22 @@ const ProductScreen = () => {
     navigate('/cart');
   };
 
+  const submitHandler=async(e)=>{
+    e.preventDefault();
+    try {
+      await createReview({
+        productId,
+        rating,
+        comment
+      }).unwrap();
+      refetch();
+      toast.success("Review Submitted");
+      setRating(0);
+      setComment("")
+    } catch (error) {
+    toast.error(error?.data?.message || error.error)  
+    }
+  }
   return (
     <>
       {/* Link to navigate back to the main screen */}
@@ -68,6 +94,8 @@ const ProductScreen = () => {
         </Message>
       ) : product ? ( // Check if 'product' is defined
         // Display product details once data is loaded
+       
+      <>
         <Row>
           <Col md={5}>
             {/* Display product image */}
@@ -152,6 +180,68 @@ const ProductScreen = () => {
             </Card>
           </Col>
         </Row>
+        <Row className='review'>
+          <Col md={6}>
+          <h2>Reviews</h2>
+          {product.reviews.length ===0 && <Message>No Reviews</Message>}
+          <ListGroup variant='flush'>
+{product.reviews.map((review)=>(
+  <ListGroupItem key={review._id}>
+    <strong>{review.name}</strong>
+    <Rating value={review.rating}/>
+    <p>{review.createdAt.substring(0, 10)}</p>
+    <p>{review.comment}</p>
+
+  </ListGroupItem>
+))}
+<ListGroupItem >
+<h2>Write a Customer review</h2>
+{loadingProductReview && <Loader/>}
+{userInfo?(
+  <Form onSubmit={submitHandler}>
+    <FormGroup controlId='rating' className='my-2'>
+<FormLabel>
+  Rating
+</FormLabel>
+<FormControl as="select" value={rating} 
+onChange={(e)=>setRating(Number(e.target.value))}>
+<option value=''>Select...</option>
+<option value="1">1 - Poor</option>
+<option value="2">2 - Fair</option>
+<option value="3">3 - Good</option>
+<option value="4">4 - Very Good</option>
+<option value="5">5 - Excellent</option>
+</FormControl>
+    </FormGroup>
+    <FormGroup controlId='comment' className='my-2'>
+      <FormLabel>Comment</FormLabel>
+       <FormControl as="textarea" rows="3"
+        value={comment} onChange={(e)=>setComment(e.target.value)}>
+
+       </FormControl>
+    </FormGroup>
+    <Button disabled={loadingProductReview} type='submit'
+     variant='primary' >
+      Submit
+
+    </Button>
+  </Form>
+):(
+  <Message>
+    Please <Link to="/login"> Sign in</Link> to write a review
+  </Message>
+)}
+
+</ListGroupItem>
+          </ListGroup>
+          
+          </Col>
+
+
+        </Row>
+        </>
+
+
       ) : null}
     </>
   );
