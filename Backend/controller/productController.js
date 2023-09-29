@@ -105,7 +105,60 @@ const deleteProduct = asyncHandler(async (req, res) => {
         throw new Error("Product not found");  
     }
 });
+const createProductReview = asyncHandler(async (req, res) => {
+    // Destructure 'rating' and 'comment' from the request body
+    const { rating, comment } = req.body;
+
+    // Find the product in the database based on the provided ID
+    const product = await Product.findById(req.params.id);
+
+    // Check if a product with the provided ID was found
+    if (product) {
+        // Check if the user has already reviewed the product
+        const alreadyReviewed = product.reviews.find((review) =>
+            review.user.toString() === req.user._id.toString()
+        );
+
+        if (alreadyReviewed) {
+            res.status(400);
+            throw new Error("Product already reviewed"); // Throw an error if already reviewed
+        }
+
+        // Create a new review object
+        const review = {
+            name: req.user.name,
+            rating: Number(rating),
+            comment,
+            user: req.user._id,
+        };
+
+        // Add the review to the product's reviews array
+        product.reviews.push(review);
+
+        // Update the number of reviews
+        product.numReviews = product.reviews.length;
+
+        // Calculate the new average rating
+        product.rating =
+            product.reviews.reduce((acc, review) => acc + review.rating, 0) /
+            product.reviews.length;
+
+        // Save the updated product to the database
+        await product.save();
+
+        // Send a JSON response with a 201 status code to indicate success
+        res.status(201).json({
+            message: "Review added",
+        });
+    } else {
+        // If the product is not found, set a 404 status
+        res.status(404);
+        throw new Error("Resource not found"); // Throw an error if product not found
+    }
+});
+
 
 // Export the controller functions to be used in other parts of the application
 export { getProductById, getProducts, 
-    createProduct, updateProduct,deleteProduct };
+    createProduct, updateProduct,
+    deleteProduct, createProductReview};

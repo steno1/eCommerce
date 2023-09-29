@@ -3,6 +3,7 @@
 import { admin, protect } from "../middleWare/AuthMiddleWare.js";
 import {
      createProduct,
+     createProductReview,
      deleteProduct,
      getProductById,
      getProducts,
@@ -35,6 +36,8 @@ router.route("/:id").put(protect, admin, updateProduct);
 // When a DELETE request with an ID parameter is made to '/:id', the deleteProduct function will be called.
 // The protect and admin middlewares are used to ensure only authenticated and authorized users can delete products.
 router.route("/:id").delete(protect, admin, deleteProduct);
+
+router.route("/:id/reviews").post(protect,createProduct);
 
 // Export the router to be used in other parts of the application
 export default router;
