@@ -7,12 +7,15 @@ import { useCreateProductMutation, useDeleteProductMutation, useGetProductsQuery
 import { LinkContainer } from 'react-router-bootstrap'; // Importing a container for links
 import Loader from '../../components/Loader'; // Importing a loader component
 import Message from '../../components/Message'; // Importing a message component
+import Paginate from '../../components/Paginate';
 import React from 'react'; // Importing the React library
 import { toast } from "react-toastify"; // Importing a library for displaying toasts
+import { useParams } from 'react-router-dom';
 
 const ProductListScreen = () => {
+    const {pageNumber}=useParams();
     // Using the useGetProductsQuery hook to get data about products
-    const { data: products, isLoading, error, refetch } = useGetProductsQuery();
+    const { data, isLoading, error, refetch } = useGetProductsQuery({pageNumber});
 
     // Using the useCreateProductMutation hook to create a new product
     const [createProduct, { isLoading: loadingCreate }] = useCreateProductMutation();
@@ -91,7 +94,7 @@ try {
                         </thead>
                         <tbody>
           {/* Map through products and render a row for each */}
-                            {products.map((product) => (
+                            {data.products.map((product) => (
                                 <tr key={product._id}>
                                     <td>{product._id}</td>
                                     <td>{product.name}</td>
@@ -116,6 +119,7 @@ try {
                             ))}
                         </tbody>
                     </Table>
+        <Paginate pages={data.pages} page={data.page} isAdmin={true}/>
                 </>
             )}
         </>

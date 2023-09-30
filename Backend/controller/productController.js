@@ -4,15 +4,25 @@ import Product from "../models/productModel.js";
 import asyncHandler from "../middleWare/asyncHandler.js";
 
 // Import the asyncHandler middleware for handling asynchronous operations
-
 // Controller function to get all products
 const getProducts = asyncHandler(async (req, res) => {
-    // Fetch all products from the database
-    const products = await Product.find({});
-    
-    // Send the retrieved products as a JSON response
-    res.json(products);
+    const pageSize = 4; // Define the number of products to display per page
+    const page = Number(req.query.pageNumber) || 1; // Get the requested page number or default to 1 if not provided
+    const count = await Product.countDocuments(); // Count the total number of products in the database
+
+    // Retrieve a subset of products for the current page
+    const products = await Product.find({})
+        .limit(pageSize) // Limit the number of products per page
+        .skip(pageSize * (page - 1)); // Skip products based on the current page
+
+    // Send a JSON response containing the retrieved products, current page, and total number of pages
+    res.json({
+        products,
+        page,
+        pages: Math.ceil(count / pageSize) // Calculate the total number of pages based on the product count and page size
+    });
 });
+
 
 // Controller function to get a product by its ID
 const getProductById = asyncHandler(async (req, res) => {

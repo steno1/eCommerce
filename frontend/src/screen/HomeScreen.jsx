@@ -4,14 +4,17 @@ import { Col, Row } from "react-bootstrap"; // Importing layout components from 
 
 import Loader from "../components/Loader";
 import Message from "../components/Message";
+import Paginate from "../components/Paginate";
 import Product from "../components/Product"; // Importing the Product component
 import React from 'react'; // Importing the React library for building UI components
 import { useGetProductsQuery } from "../slices/productApiSlice"; // Importing a custom query hook for fetching product data
+import { useParams } from "react-router-dom";
 
 // Define the HomeScreen component
 const HomeScreen = () => {
+  const {pageNumber}=useParams();
   // Use the custom query hook to fetch product data from the API
-  const { data: products, isLoading, error } = useGetProductsQuery();
+  const { data, isLoading, error } = useGetProductsQuery({pageNumber});
 
   // Render the component's UI
   return (
@@ -31,13 +34,14 @@ const HomeScreen = () => {
           <h1>Latest Products</h1>
           <Row>
             {/* Map through the products array and render each product */}
-            {products.map((product) => (
+            {data.products.map((product) => (
               <Col key={product._id} sm={12} md={6} lg={4} xl={3}>
                 {/* Render the Product component with the current product */}
                 <Product product={product} />
               </Col>
             ))}
           </Row>
+          <Paginate pages={data.pages} page={data.page}/>
         </>
       )}
     </>
