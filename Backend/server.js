@@ -30,11 +30,6 @@ app.use(express.urlencoded({ extended: true }));
 // Middleware to parse cookies in incoming requests
 app.use(cookieParser());
 
-// Set up a route that responds with a simple message when the root URL is accessed
-app.get("/", (req, res) => {
-    res.send("Server is running");
-});
-
 // Set up routes for various resources (products, users, orders)
 app.use(`/api/products`, productRoutes);
 app.use(`/api/users`, userRoutes);
@@ -47,8 +42,23 @@ app.get("/api/config/paypal", (req, res) => {
     res.send({ clientId: process.env.payPal_client_Id });
 });
 
+// Get the current directory path and store it in '__dirname'
 const __dirname=path.resolve();
 app.use("/uploads", express.static(path.join(__dirname, "/uploads"))); // Serve static files in '/uploads' directory
+
+if(process.env.NODE_ENV==="production"){
+    // Serve static files from '/frontend/build' in production
+    app.use(express.static(path.join(__dirname, "/frontend/build")))
+
+    app.get("*", (req, res) => res.sendFile(path.resolve(__dirname, "frontend", "build", "index.html")));
+// This line serves the 'index.html' file located in the 'frontend/build' directory.
+
+} else {
+    // For all other routes, respond with "Api is running..."
+    app.get("/", (req, res)=>{
+        res.send("Api is running...")
+    })   
+}
 
 // Apply custom 'notFound' and 'errorHandler' middleware for handling errors
 app.use(notFound);

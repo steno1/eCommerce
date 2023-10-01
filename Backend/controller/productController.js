@@ -6,7 +6,7 @@ import asyncHandler from "../middleWare/asyncHandler.js";
 // Import the asyncHandler middleware for handling asynchronous operations
 // Controller function to get all products
 const getProducts = asyncHandler(async (req, res) => {
-    const pageSize = 4; // Define the number of products to display per page
+    const pageSize =process.env.PAGINATION_LIMIT;
     const page = Number(req.query.pageNumber) || 1; // Get the requested page number or default to 1 if not provided
    
    const keyWord=req.query.keyWord?{
