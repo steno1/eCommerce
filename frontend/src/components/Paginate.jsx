@@ -5,22 +5,22 @@ import { Pagination } from 'react-bootstrap' // Importing a component from 'reac
 import React from 'react' // Importing the React library
 
 // Defining a functional component called Paginate that accepts some props
-const Paginate = ({pages,page, isAdmin=false}) => {
+const Paginate = ({pages, page, isAdmin=false, keyWord=""}) => {
   return (
     // Conditionally render pagination if there are more than 1 page
-    pages> 1 &&(
+    pages > 1 && (
       // Render Pagination component from react-bootstrap
       <Pagination>
         {/* Generate an array of page numbers and map over them */}
-        {[...Array(pages).keys()].map((x)=>(
+        {[...Array(pages).keys()].map((x) => (
           // For each page number, create a LinkContainer component
           <LinkContainer key={x + 1} to={
             // Determine the link based on whether it's an admin page or not
-            !isAdmin?`/page/${x+1}`: `/admin/productlist/${x +1}`
+            !isAdmin ? keyWord ? `/search/${keyWord}/page/${x + 1}` : `/page/${x + 1}` : `/admin/productlist/${x + 1}`
           }>
             {/* Render a Pagination.Item component */}
-            <Pagination.Item active={x+1===page}>
-              {x+1}
+            <Pagination.Item active={x + 1 === page}>
+              {x + 1}
             </Pagination.Item>
           </LinkContainer>
         ))}

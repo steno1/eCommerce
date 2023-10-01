@@ -14,10 +14,11 @@ export const productsApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     // Define an endpoint to get products
     getProducts: builder.query({
-      query: ({pageNumber}) => ({
+      query: ({pageNumber, keyWord}) => ({
         url: PRODUCTS_URL, // The URL for fetching products
         params:{
-          pageNumber
+          pageNumber,
+          keyWord
         }
       }),
       providesTags:["Product"], // This endpoint provides data with the "Product" tag

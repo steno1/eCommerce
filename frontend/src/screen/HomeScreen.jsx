@@ -1,6 +1,7 @@
 // Import necessary components and functions from external libraries and files
 
 import { Col, Row } from "react-bootstrap"; // Importing layout components from react-bootstrap for grid structure
+import { Link, useParams } from "react-router-dom";
 
 import Loader from "../components/Loader";
 import Message from "../components/Message";
@@ -8,17 +9,19 @@ import Paginate from "../components/Paginate";
 import Product from "../components/Product"; // Importing the Product component
 import React from 'react'; // Importing the React library for building UI components
 import { useGetProductsQuery } from "../slices/productApiSlice"; // Importing a custom query hook for fetching product data
-import { useParams } from "react-router-dom";
 
 // Define the HomeScreen component
 const HomeScreen = () => {
-  const {pageNumber}=useParams();
+  const {pageNumber, keyWord}=useParams();
   // Use the custom query hook to fetch product data from the API
-  const { data, isLoading, error } = useGetProductsQuery({pageNumber});
+  const { data, isLoading, error } = useGetProductsQuery({keyWord,pageNumber});
 
   // Render the component's UI
   return (
     <>
+    {keyWord && <Link to= "/" className="btn btn-light mb-4" >
+      Back
+      </Link>}
       {/* Check if the data is still loading */}
       {isLoading ? (
         <Loader/>
@@ -41,7 +44,8 @@ const HomeScreen = () => {
               </Col>
             ))}
           </Row>
-          <Paginate pages={data.pages} page={data.page}/>
+          <Paginate pages={data.pages} 
+          page={data.page} keyWord={keyWord ? keyWord :''}/>
         </>
       )}
     </>

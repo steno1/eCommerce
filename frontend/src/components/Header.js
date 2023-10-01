@@ -5,6 +5,7 @@ import { FaShoppingCart, FaUser } from "react-icons/fa"; // Corrected import for
 
 import { LinkContainer } from "react-router-bootstrap"; // Import LinkContainer for routing
 import React from 'react';
+import SearchBox from "./searchBox";
 import logo from "../assets/steno_logo.jpg"; // Import logo image.
 import { logout } from "../slices/authSlice";
 import { useDispatch } from "react-redux";
@@ -53,6 +54,8 @@ const Header = () => {
           {/* Collapsible navigation */}
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="ms-auto"> {/* Use the Nav component for navigation */}
+              <SearchBox />
+              
               {/* Cart link */}
               <LinkContainer to='/cart'>
                 <Nav.Link href="/cart">

@@ -58,7 +58,9 @@ const router = createBrowserRouter(createRoutesFromElements(
         <Route path="/placeorder" element={<PlaceOrderScreen/>}/>
         <Route path="/order/:id" element={<OrderScreen/>}/>
         <Route path="/profile" element={<ProfileScreen/>}/>
+        <Route path="/search/:keyWord" element={<HomeScreen/>}/>
         <Route path="/page/:pageNumber" element={<HomeScreen/>}/>
+        <Route path="/search/:keyWord/page/:pageNumber" element={<HomeScreen/>}/>
       </Route>
 
       {/* Make AdminRoute a route */}

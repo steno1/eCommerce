@@ -8,10 +8,18 @@ import asyncHandler from "../middleWare/asyncHandler.js";
 const getProducts = asyncHandler(async (req, res) => {
     const pageSize = 4; // Define the number of products to display per page
     const page = Number(req.query.pageNumber) || 1; // Get the requested page number or default to 1 if not provided
-    const count = await Product.countDocuments(); // Count the total number of products in the database
+   
+   const keyWord=req.query.keyWord?{
+   name:{ $regex:req.query.keyWord, 
+
+          $options:"i"
+        }
+   }:{};
+
+    const count = await Product.countDocuments({...keyWord}); // Count the total number of products in the database
 
     // Retrieve a subset of products for the current page
-    const products = await Product.find({})
+    const products = await Product.find({...keyWord})
         .limit(pageSize) // Limit the number of products per page
         .skip(pageSize * (page - 1)); // Skip products based on the current page
 
