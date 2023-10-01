@@ -180,7 +180,7 @@ const getTopProducts = asyncHandler(async(req, res) => {
 
     const products = await Product.find({}).sort({
         rating: -1
-    }).limit(3);
+    }).limit(6);
     // Using the Mongoose 'find' method to retrieve all products
     // Sorting the products in descending order based on the 'rating' field
     // Limiting the result to 3 products

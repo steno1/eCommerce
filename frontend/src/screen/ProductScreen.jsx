@@ -20,6 +20,7 @@ import { useNavigate, useParams } from 'react-router-dom'; // Import necessary h
 import { Link } from 'react-router-dom';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
+import Meta from '../components/Meta';
 import Rating from '../components/Rating';
 import { addToCart } from '../slices/cardSlice'; // Import the addToCart action from Redux slice
 import {toast} from "react-toastify"
@@ -105,6 +106,7 @@ const ProductScreen = () => {
      ) : product ? ( // Check if 'product' is defined
        // Display product details once data is loaded
        <>
+       <Meta title={product.name}/>
          <Row>
            <Col md={5}>
              {/* Display product image */}

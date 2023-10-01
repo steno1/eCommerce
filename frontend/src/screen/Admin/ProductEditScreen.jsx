@@ -27,7 +27,7 @@ const ProductEditScreen = () => {
     const [description, setDescription] = useState("")
 
     // Fetching product details based on 'productId'.
-    const { data: product, isLoading, error, refetch } = useGetProductDetailsQuery(productId)
+    const { data: product, isLoading, error} = useGetProductDetailsQuery(productId)
 
     // Mutation for updating product details.
     const [updateProduct, { isLoading: loadingUpdate }] = useUpdateProductMutation();
@@ -159,7 +159,7 @@ const uploadFileHandler = async (e) => {
                                 onChange={uploadFileHandler}>
                             </FormControl>
                         </FormGroup>
-
+                        {loadingUpload && <Loader/>}
                         <FormGroup controlId='brand' className='my-2'>
                             <FormLabel>Brand</FormLabel>
                             <FormControl

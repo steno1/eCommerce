@@ -1,5 +1,4 @@
 import { Button, Table } from 'react-bootstrap'
-import { useDispatch, useSelector } from 'react-redux'
 
 import { FaTimes } from 'react-icons/fa'
 import { LinkContainer } from 'react-router-bootstrap'

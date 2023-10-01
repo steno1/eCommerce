@@ -15,6 +15,7 @@ import AdminRoute from "./components/AdminRoute"; // Importing AdminRoute compon
 // Import application components
 import App from './App';
 import CartScreen from "./screen/cartScreen";
+import {HelmetProvider} from "react-helmet-async"
 import HomeScreen from "./screen/HomeScreen";
 import LoginScreen from "./screen/loginScreen";
 import OrderListScreen from "./screen/Admin/OrderListScreen";
@@ -56,11 +57,12 @@ const router = createBrowserRouter(createRoutesFromElements(
         <Route path="/shipping" element={<ShippingScreen/>}/>
         <Route path="/payment" element={<PaymentScreen/>}/>
         <Route path="/placeorder" element={<PlaceOrderScreen/>}/>
-        <Route path="/order/:id" element={<OrderScreen/>}/>
         <Route path="/profile" element={<ProfileScreen/>}/>
         <Route path="/search/:keyWord" element={<HomeScreen/>}/>
         <Route path="/page/:pageNumber" element={<HomeScreen/>}/>
         <Route path="/search/:keyWord/page/:pageNumber" element={<HomeScreen/>}/>
+        <Route path='/product/:id' element={<ProductScreen />} />
+        <Route path="/order/:id" element={<OrderScreen/>}/>
       </Route>
 
       {/* Make AdminRoute a route */}
@@ -81,6 +83,7 @@ const router = createBrowserRouter(createRoutesFromElements(
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
+    <HelmetProvider>
     {/* Wrap the application with Redux Provider */}
     <Provider store={store}>
       {/* Provide the PayPalScriptProvider for PayPal integration */}
@@ -88,5 +91,6 @@ root.render(
         <RouterProvider router={router}/>
       </PayPalScriptProvider>
     </Provider>
+    </HelmetProvider>
   </React.StrictMode>
 );

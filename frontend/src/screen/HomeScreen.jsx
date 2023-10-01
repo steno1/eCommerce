@@ -35,6 +35,7 @@ const HomeScreen = () => {
       ) : (
         <>
           {/* If data is loaded and no error, display the list of products */}
+      
           <h1>Latest Products</h1>
           <Row>
             {/* Map through the products array and render each product */}
