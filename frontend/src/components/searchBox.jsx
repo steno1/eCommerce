@@ -52,7 +52,8 @@ const SearchBox = () => {
             <Button 
                 type="submit" 
                 variant="outline-light"
-                className="p-2 mx-2"
+                className="p-2 mx-2 search-button"
+                size="sm"
             >
                 Search
             </Button>

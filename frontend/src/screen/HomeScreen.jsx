@@ -7,6 +7,7 @@ import Loader from "../components/Loader";
 import Message from "../components/Message";
 import Paginate from "../components/Paginate";
 import Product from "../components/Product"; // Importing the Product component
+import ProductCarousal from "../components/ProductCarousal";
 import React from 'react'; // Importing the React library for building UI components
 import { useGetProductsQuery } from "../slices/productApiSlice"; // Importing a custom query hook for fetching product data
 
@@ -19,7 +20,7 @@ const HomeScreen = () => {
   // Render the component's UI
   return (
     <>
-    {keyWord && <Link to= "/" className="btn btn-light mb-4" >
+    {!keyWord? <ProductCarousal/>:<Link to= "/" className="btn btn-light mb-4" >
       Back
       </Link>}
       {/* Check if the data is still loading */}

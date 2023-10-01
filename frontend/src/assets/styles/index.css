@@ -85,6 +85,21 @@ table th {
   background: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
 }
 
+.custom-carousel .carousel-control-prev-icon,
+.custom-carousel .carousel-control-next-icon {
+  background-color: red;
+}
+
+.custom-carousel .carousel-control-prev-icon:hover,
+.custom-carousel .carousel-control-next-icon:hover {
+  background-color: green; 
+}
+
+
+
+
+
+
 .red-email-input {
   color: black; 
   font-weight: 500;

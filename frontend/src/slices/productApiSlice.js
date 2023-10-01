@@ -54,31 +54,48 @@ export const productsApiSlice = apiSlice.injectEndpoints({
 
       invalidatesTags: ["Product"] // This invalidates data with the "Product" tag after update
     }),
-    uploadProductImage:builder.mutation({
-query:(data)=>({
-  url:`${UPLOADS_URL}`,
-  method:"POST",
-  body:data
-})
 
-    }),
-    deleteProduct:builder.mutation({
-      query:(productId)=>({
-        url:`${PRODUCTS_URL}/${productId}`,
-        method:"DELETE"
-      
+    uploadProductImage: builder.mutation({
+      // Define a mutation for uploading a product image
+      query: (data) => ({
+        // Define the API request configuration for uploading an image
+        url: `${UPLOADS_URL}`, // The URL for making the POST request to upload an image
+        method: "POST", // The HTTP method used for the request
+        body: data, // The image data to be sent in the request body
       })
     }),
-    createReview:builder.mutation({
-      query:(data)=>({
-        url:`${PRODUCTS_URL}/${data.productId}/reviews`,
-        method:'POST',
-        body:data
+
+    deleteProduct: builder.mutation({
+      // Define a mutation for deleting a product
+      query: (productId) => ({
+        // Define the API request configuration for deleting a product
+        url: `${PRODUCTS_URL}/${productId}`, // The URL for deleting a specific product
+        method: "DELETE" // The HTTP method used for the request
+      })
+    }),
+
+    createReview: builder.mutation({
+      // Define a mutation for creating a review for a product
+      query: (data) => ({
+        // Define the API request configuration for creating a review
+        url: `${PRODUCTS_URL}/${data.productId}/reviews`, // The URL for making the POST request to create a review
+        method: 'POST', // The HTTP method used for the request
+        body: data // The review data to be sent in the request body
       }),
-      invalidatesTags:['Product']
-    })
+      invalidatesTags: ['Product'] // This invalidates data with the "Product" tag after review creation
+    }),
+
+    getTopProducts: builder.query({
+      // Define a query for fetching the top products
+      query: () => ({
+        // Define the API request configuration for fetching top products
+        url: `${PRODUCTS_URL}/top`, // The URL for fetching top products
+      }),
+      keepUnusedDataFor: 5 // Keep unused data in cache for 5 minutes
+    }),
+
   }),
-  
+
 });
 
 // Extract the generated query hook from productsApiSlice
@@ -88,5 +105,8 @@ export const {
   useGetProductsQuery,
   useUpdateProductMutation,
    useUploadProductImageMutation,
-   useDeleteProductMutation, useCreateReviewMutation
+   useDeleteProductMutation,
+    useCreateReviewMutation,
+    useGetTopProductsQuery
+  
 } = productsApiSlice;

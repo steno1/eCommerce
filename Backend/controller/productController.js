@@ -175,8 +175,22 @@ const createProductReview = asyncHandler(async (req, res) => {
     }
 });
 
+const getTopProducts = asyncHandler(async(req, res) => {
+    // Using asyncHandler to handle asynchronous operations
+
+    const products = await Product.find({}).sort({
+        rating: -1
+    }).limit(3);
+    // Using the Mongoose 'find' method to retrieve all products
+    // Sorting the products in descending order based on the 'rating' field
+    // Limiting the result to 3 products
+
+    res.status(200).json(products);
+    // Sending a JSON response with a 200 status code, containing the top 3 products
+});
 
 // Export the controller functions to be used in other parts of the application
 export { getProductById, getProducts, 
     createProduct, updateProduct,
-    deleteProduct, createProductReview};
+    deleteProduct, createProductReview,
+getTopProducts};

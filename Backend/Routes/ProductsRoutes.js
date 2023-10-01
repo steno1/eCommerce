@@ -7,6 +7,7 @@ import {
      deleteProduct,
      getProductById,
      getProducts,
+     getTopProducts,
      updateProduct
 } from "../controller/productController.js";
 
@@ -21,6 +22,9 @@ const router = express.Router();
 
 // When a GET request is made to '/', the getProducts function will be called
 router.route('/').get(getProducts);
+
+// When a GET request is made to '/top', the getTopProducts function will be called
+router.route("/top").get(getTopProducts);
 
 // When a GET request with an ID parameter is made to '/:id', the getProductById function will be called
 router.route("/:id").get(getProductById);
@@ -37,7 +41,10 @@ router.route("/:id").put(protect, admin, updateProduct);
 // The protect and admin middlewares are used to ensure only authenticated and authorized users can delete products.
 router.route("/:id").delete(protect, admin, deleteProduct);
 
+// When a POST request with an ID parameter is made to '/:id/reviews', the createProductReview function will be called.
+// The protect middleware is used to ensure only authenticated users can create reviews.
 router.route("/:id/reviews").post(protect,createProductReview);
+
 
 // Export the router to be used in other parts of the application
 export default router;
