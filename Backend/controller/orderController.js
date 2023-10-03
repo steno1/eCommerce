@@ -5,6 +5,10 @@ import Product from '../models/productModel.js';
 import asyncHandler from '../middleware/asyncHandler.js';
 import { calcPrices } from '../utils/CalPrice.js';
 
+//import asyncHandler from '../middleware/asyncHandler.js';
+
+
+
 const addOrderItems = asyncHandler(async (req, res) => {
   const { orderItems, shippingAddress, paymentMethod } = req.body;
 
@@ -72,8 +76,7 @@ const getOrderById = asyncHandler(async (req, res) => {
 
 
 const updateOrderToPaid = asyncHandler(async (req, res) => {
-  // NOTE: here we need to verify the payment was made to PayPal before marking
-  // the order as paid
+ 
   const { verified, value } = await verifyPayPalPayment(req.body.id);
   if (!verified) throw new Error('Payment not verified');
 

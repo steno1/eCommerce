@@ -1,7 +1,7 @@
 // Import the Product model from the specified path
 
 import Product from "../models/productModel.js";
-import asyncHandler from "../middleWare/asyncHandler.js";
+import asyncHandler from "../middleware/asyncHandler.js";
 
 // Import the asyncHandler middleware for handling asynchronous operations
 // Controller function to get all products

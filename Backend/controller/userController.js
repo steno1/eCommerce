@@ -2,7 +2,7 @@
 
 import { Error } from "mongoose";
 import User from "../models/userModel.js";
-import asyncHandler from "../middleWare/asyncHandler.js";
+import asyncHandler from "../middleware/asyncHandler.js";
 import generateToken from "../utils/generateToken.js";
 
 // Importing the asyncHandler middleware from the asyncHandler.js file.
