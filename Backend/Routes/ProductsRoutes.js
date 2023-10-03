@@ -1,6 +1,6 @@
 // Import the controller functions for handling requests
 
-import { admin, protect } from "../middleware/authMiddleware.js";
+import { admin, protect } from "../middleware/AuthMiddleWare.js";
 import {
      createProduct,
      createProductReview,

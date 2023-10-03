@@ -1,6 +1,6 @@
 // Importing necessary functions from the userController.js file.
 
-import { admin, protect } from "../middleware/authMiddleware.js";
+import { admin, protect } from "../middleware/AuthMiddleWare.js";
 import {
      authUser,
      deleteUser,
