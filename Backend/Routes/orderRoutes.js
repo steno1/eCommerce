@@ -6,7 +6,7 @@ import {
   updateOrderToDelivered,
   updateOrderToPaid,
 } from '../controller/orderController.js';
-import { admin, protect } from '../middleware/authMiddleware.js';
+import { admin, protect } from '../middleware/AuthMiddleWare.js';
 
 import express from 'express';
 
