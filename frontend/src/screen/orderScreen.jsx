@@ -72,7 +72,7 @@ function onApprove(data, actions) {
     return actions.order.capture().then(async function (details) {
         try {
             // Call payOrder with orderId and payment details
-            await payOrder({orderId, details});
+            await payOrder({orderId, details}).unwrap();
             // Fetch order details again after successful payment
             refetch();
             // Show a success toast message
