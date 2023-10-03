@@ -8,6 +8,7 @@ import React from 'react';
 import SearchBox from "./searchBox";
 import logo from "../assets/steno_logo.jpg"; // Import logo image.
 import { logout } from "../slices/authSlice";
+import { resetCart } from "../slices/cardSlice";
 import { useDispatch } from "react-redux";
 import { useLogoutMutation } from "../slices/usersApi";
 import { useNavigate } from "react-router-dom";
@@ -29,6 +30,7 @@ const Header = () => {
     try {
       await logoutApiCall().unwrap(); // Performs the logout API call and unwraps the result.
       dispatch(logout()); // Dispatches a 'logout' action to update authentication state.
+      dispatch(resetCart()) // Dispatch an action to reset the shopping cart state
       navigate("/login"); // Navigates the user to the "/login" route.
     } catch (err) {
       console.log(err); // Logs any errors that occur during the logout process.

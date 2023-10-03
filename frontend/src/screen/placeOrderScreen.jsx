@@ -19,7 +19,7 @@ const PlaceOrderScreen = () => {
     const navigate=useNavigate();  // React Router's navigation function
     const dispatch=useDispatch();  // Redux dispatch function
     const cart=useSelector((state)=>state.cart);  // Selecting cart state from Redux store
-    const [createOrder, {isLoading, isError}]=useCreateOrderMutation();  // Mutation function and its loading and error states
+    const [createOrder, {isLoading, error}]=useCreateOrderMutation();  // Mutation function and its loading and error states
 
     // useEffect to handle navigation based on cart state
     useEffect(()=>{
@@ -118,7 +118,7 @@ const PlaceOrderScreen = () => {
                  {/* (Similar code for Shipping, Tax, and Total) */}
                             </ListGroupItem>
                             <ListGroupItem>
-                 {isError && <Message variant='danger'>{isError}</Message>}  {/* Displaying an error message if there is an error */}
+                 {error && <Message variant='danger'>{error.data.message}</Message>}  {/* Displaying an error message if there is an error */}
                             </ListGroupItem>
                             <ListGroupItem>
                       <Button type='button' className='btn-block'

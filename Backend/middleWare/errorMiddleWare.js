@@ -21,13 +21,6 @@ const notFound = (req, res, next) => {
     // Extract the error message from the error object.
     let message = err.message;
   
-    // Check for specific error types.
-    // If the error is a "CastError" with the "ObjectId" kind,
-    // update the message and set the status code to 404.
-    if (err.name === "CastError" && err.kind === "ObjectId") {
-      message = "Resource not found";
-      statusCode = 404;
-    }
   
     // Set the response status code and send a JSON response with error details.
     res.status(statusCode).json({

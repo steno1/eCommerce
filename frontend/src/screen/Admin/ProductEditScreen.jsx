@@ -118,7 +118,7 @@ const uploadFileHandler = async (e) => {
                 {loadingUpdate && <Loader />}
                 {/* Displaying loader or error message while fetching product data. */}
                 {isLoading ? <Loader /> : error ? (
-                    <Message variant="danger">{error}</Message>
+                    <Message variant="danger">{error.data.message}</Message>
                 ) : (
                     // Rendering the product edit form.
                     <Form onSubmit={submitHandler}>

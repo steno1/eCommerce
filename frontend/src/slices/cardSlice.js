@@ -61,7 +61,8 @@ return updateCart(state);
     clearCartItem:(state, action)=>{
 state.cartItems=[];
 return updateCart(state)
-    }
+    },
+    resetCart:(state)=>(state=initialState)
   },
 });
 
@@ -73,7 +74,8 @@ return updateCart(state)
 
 // Extract the 'addToCart' and 'removeFromCart' actions from the cartSlice
 export const { addToCart, removeFromCart,clearCartItem,
-   saveShippingAddress, savePaymentMethod} = cartSlice.actions;
+   saveShippingAddress, savePaymentMethod,
+  resetCart} = cartSlice.actions;
 
 /* 
    This line extracts the 'addToCart' and 'removeFromCart' actions from the 'cartSlice' slice.

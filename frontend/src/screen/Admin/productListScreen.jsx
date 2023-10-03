@@ -75,7 +75,7 @@ try {
             ) : error ? (
                 // Display an error message if there's an error
                 <Message variant="danger">
-                    {error}
+                    {error.data.message}
                 </Message>
             ) : (
                 // If there's no error, display the product table

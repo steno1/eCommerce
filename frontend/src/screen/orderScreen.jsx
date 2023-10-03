@@ -22,7 +22,7 @@ const OrderScreen = () => {
     const { id: orderId } = useParams(); // Destructuring 'id' parameter from URL using 'useParams'
     
     // Calls a custom hook 'useGetOrderDetailQuery' with 'orderId'
-    const { data: order, isLoading, isError, refetch }
+    const { data: order, isLoading, error, refetch }
      = useGetOrderDetailQuery(orderId); // Fetching order details using custom hook
 const [deliverOrder, {isLoading:loadingDeliver}]=useDeliverOrderMutation();
     const [payOrder,{isLoading:loadingPay}]=usePayOrderMutation(); // Destructuring 'payOrder' mutation and 'loadingPay' flag
@@ -127,7 +127,9 @@ try {
 }
 
     // Conditional rendering based on loading state and error state
-    return isLoading ? <Loader /> : isError ? <Message variant='danger' /> : (
+    return isLoading ? <Loader /> : error ?
+     <Message variant='danger'>{error?.data?.message || error.error}
+     </Message>: (
         <>
             <h1>
                 Order {order._id}
