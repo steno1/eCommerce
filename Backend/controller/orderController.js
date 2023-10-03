@@ -8,7 +8,6 @@ import { calcPrices } from '../utils/CalPrice.js';
 //import asyncHandler from '../middleware/asyncHandler.js';
 
 
-
 const addOrderItems = asyncHandler(async (req, res) => {
   const { orderItems, shippingAddress, paymentMethod } = req.body;
 
