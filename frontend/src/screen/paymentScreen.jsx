@@ -54,7 +54,7 @@ const PaymentScreen = () => {
                             name="paymentMethod" 
                             value='PayPal' 
                             checked // The radio button is checked by default
-                            onChange={(e) => setPaymentMethod(e.target.value)} // Function to update payment method state
+             onChange={(e) => setPaymentMethod(e.target.value)} // Function to update payment method state
                         />
                     </Col>
                 </FormGroup>

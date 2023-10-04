@@ -20,10 +20,10 @@ const ShippingScreen = () => {
     const { shippingAddress } = cart;
 
     // Initializing state variables and setting their initial values based on shippingAddress (if available)
-    const [address, setAddress] = useState(shippingAddress?.address) || "" ;
-    const [city, setCity] = useState(shippingAddress?.city) || "";
-    const [postalCode, setPostalCode] = useState(shippingAddress?.postalCode) || ""
-    const [country, setCountry] = useState(shippingAddress?.country) || "";
+    const [address, setAddress] = useState(shippingAddress.address) || "" ;
+    const [city, setCity] = useState(shippingAddress.city) || "";
+    const [postalCode, setPostalCode] = useState(shippingAddress.postalCode) || ""
+    const [country, setCountry] = useState(shippingAddress.country) || "";
     
     // Using the useNavigate hook to get a navigation function
     const navigate = useNavigate();
