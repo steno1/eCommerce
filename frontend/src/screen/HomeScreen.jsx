@@ -9,10 +9,29 @@ import Paginate from "../components/Paginate";
 import Product from "../components/Product"; // Importing the Product component
 import ProductCarousal from "../components/ProductCarousal";
 import React from 'react'; // Importing the React library for building UI components
+import axios from "axios";
+import { useEffect } from "react";
 import { useGetProductsQuery } from "../slices/productApiSlice"; // Importing a custom query hook for fetching product data
+import { useState } from "react";
 
 // Define the HomeScreen component
 const HomeScreen = () => {
+  const [products, setProducts]=useState([])
+  useEffect(()=>{
+const fetchProducts=async()=>{
+  try {
+    const {data}=await axios.get("/api/products")
+  if(data){
+    setProducts(data)
+  }
+  } catch (error) {
+    console.error("Error fetching products:", error);
+  }
+
+  
+};
+fetchProducts();
+  }, [])
   const {pageNumber, keyWord}=useParams();
   // Use the custom query hook to fetch product data from the API
   const { data, isLoading, error } = useGetProductsQuery({keyWord,pageNumber});
@@ -39,7 +58,7 @@ const HomeScreen = () => {
           <h1>Latest Products</h1>
           <Row>
             {/* Map through the products array and render each product */}
-            {data.products.map((product) => (
+            {products.map((product) => (
               <Col key={product._id} sm={12} md={6} lg={4} xl={3}>
                 {/* Render the Product component with the current product */}
                 <Product product={product} />

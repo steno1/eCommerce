@@ -37,7 +37,7 @@ const Product = ({ product }) => {
         </Link>
         {/* Display product price */}
         <Card.Text as="h3">
-          ${product.price}
+        ₦{product.price}
         </Card.Text>
       </Card.Body>
     </Card>
