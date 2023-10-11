@@ -29,9 +29,9 @@ import { useGetProductDetailsQuery } from '../slices/productApiSlice';
 
 // Functional component representing the product details screen
 const ProductScreen = () => {
- // Extracting the 'productId' parameter from the URL using React Router's 'useParams' hook
+  // Extracting the 'productId' parameter from the URL using React Router's 'useParams' hook
  const { id: productId } = useParams();
-
+ 
  // Initializing Redux's dispatch function to dispatch actions
  const dispatch = useDispatch();
 
