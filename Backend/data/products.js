@@ -121,7 +121,7 @@ const products = [
   {
     
     name: '  Effortless Elegance Draped Blouse Tee',
-    image: '/images/TshirtWomen.png',
+    image: '/images/womenTop.jpg',
     description:
       'Elevate your casual wardrobe with the ChicEssence Effortless Elegance Draped Blouse Tee. This versatile piece combines the comfort of a T-shirt with the sophistication of a blouse. The relaxed fit and draped design create a flattering silhouette, while the soft, breathable fabric ensures all-day comfort. ',
     brand: 'ChicEssence',
