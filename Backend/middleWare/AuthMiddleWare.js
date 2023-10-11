@@ -16,7 +16,7 @@ const protect = asyncHandler(async (req, res, next) => {
  // Verify the token using the JWT_SECRET stored in the environment variables
      const decoded = Jwt.verify(token, process.env.JWT_SECRET);
 
-    // Find the user by their ID, excluding the password field
+    // Find the user by their ID, excluding the password field(s)
     req.user= await User.findById(decoded.userId).select("-password");
 /* req.user, the result of the database query is
  assigned to the req.user property. This is a common pattern in
