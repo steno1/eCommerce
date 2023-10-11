@@ -5,9 +5,6 @@ import Product from '../models/productModel.js';
 import asyncHandler from '../middleware/asyncHandler.js';
 import { calcPrices } from '../utils/CalPrice.js';
 
-//import asyncHandler from '../middleware/asyncHandler.js';
-
-
 const addOrderItems = asyncHandler(async (req, res) => {
   const { orderItems, shippingAddress, paymentMethod } = req.body;
 
@@ -33,7 +30,7 @@ const addOrderItems = asyncHandler(async (req, res) => {
       };
     });
 
-    // calculate prices
+    // Calculate prices
     const { itemsPrice, taxPrice, shippingPrice, totalPrice } =
       calcPrices(dbOrderItems);
 
